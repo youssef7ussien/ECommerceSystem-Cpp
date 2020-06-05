@@ -1,13 +1,16 @@
-#ifndef E_COMMERCE_SYSTEM_ACCOUNT_H
-#define E_COMMERCE_SYSTEM_ACCOUNT_H
+#ifndef UNTITLED1_ACCOUNT_H
+#define UNTITLED1_ACCOUNT_H
 
-#include <string>
+#include <iostream>
 using namespace std;
 
-class account {
-    string firstName, lastName, userName, email, password;
+class Account {
+    string firstName,lastName,userName,email,password;
 public:
-    account(string , string , string , string , string);
+    Account();
+    Account(const string &firstName, const string &lastName, const string &userName, const string &email,
+            const string &password);
+    string getName() const;
     string getFirstName() const;
     void setFirstName(string);
     string getLastName() const;
@@ -18,7 +21,12 @@ public:
     void setEmail(string);
     string getPassword() const;
     void setPassword(string);
+    bool validationEmail();
+    bool validationName();
+    bool validationUsername();
+    bool validationPassword();
+    bool confirmPassword(string);
+
 };
 
-
-#endif //E_COMMERCE_SYSTEM_ACCOUNT_H
+#endif //UNTITLED1_ACCOUNT_H

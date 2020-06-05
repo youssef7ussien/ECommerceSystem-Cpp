@@ -173,7 +173,7 @@ public:
         return &cur->item;
 	}
 	//----------------------------------------------
-	type getCopyItem(int index)
+	type getCopyItem(int index) const
 	{
         Node *cur = head;
         while(index--)

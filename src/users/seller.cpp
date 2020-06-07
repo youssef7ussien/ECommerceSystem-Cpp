@@ -39,10 +39,25 @@ Categories Seller::getCategories() const
     return categories;
 }
 
-bool Seller::addProduct(Product item)
+bool Seller::addProduct(Product product)
 {
-    products.addProduct(item);
+    if(!categories.searchCategory(product.getCategoryName()))
+        categories.addCategory(Category(product.getCategoryName(),product.getId()));
+    else
+        categories[product.getCategoryName()]->addProductId(product.getId());
+
+    products.addProduct(product);
     return true;
+}
+
+bool Seller::deleteProduct(int id)
+{
+    return products.deleteProduct(id);
+}
+
+bool Seller::deleteProductAt(int index)
+{
+    return products.deleteProductAt(index);
 }
 //
 //bool Seller::updateItemName(int Id,string newName)

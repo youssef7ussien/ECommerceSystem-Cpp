@@ -12,7 +12,7 @@
 #define KEY_ENTER       13
 
 #define KEY_HOME        71
-#define KEY_ESC        27
+#define KEY_ESC         27
 #define KEY_CENTER      76
 #define KEY_END         79
 

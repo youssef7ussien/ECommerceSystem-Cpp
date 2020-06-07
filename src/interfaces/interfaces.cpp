@@ -1,10 +1,10 @@
+#include <iostream>
 #include <conio.h>
-#include "Interfaces.h"
+#include <regex>
+#include "interfaces.h"
 #include "seller_interface.h"
 #include "customer_interface.h"
-#include "Account.h"
-#include <regex>
-#include <iostream>
+#include "../users/account.h"
 
 using namespace std;
 
@@ -56,11 +56,34 @@ int interfaceLoginAs()
     return index;
 }
 
+inline string inputText(string text)
+{
+    char character=getchar();
+    while(1)
+    {
+        if(character=='\n')
+        {
+            return text;
+            break;
+        }
+        text+=character;
+        character=getchar();
+    }
+}
+
+inline void initialBox(int x,int y,int width,int lengthLine)
+{
+    setCursor(x+2,y+1);
+    clearLine(lengthLine);
+    color(RED); drawRectangle(x,y,width,1); color();
+    setCursor(x+2,y+1);
+}
+
 bool interfaceLogin()
 {
     system("cls");
-    char key=80;  int index=2;
-    string username,password;
+    char key='0';  int index=2;
+    string username="",password="";
     drawRectangle(50,1,30,1,2); // login box
     setCursor(62,2); cout<<"Login";
     drawRectangle(45,6,40,1); // email box
@@ -70,7 +93,7 @@ bool interfaceLogin()
     drawRectangle(50,14,14,1); // Again box
     drawRectangle(66,14,14,1); // Exit box
 
-    while(key!=13)
+    while(key!=KEY_ENTER)
     {
         setCursor(52,15);
         if(index==0)  color(BLACK,RED);
@@ -83,54 +106,23 @@ bool interfaceLogin()
         if(index==2)
         {
             editCursor(true);
-            color(RED);
-            drawRectangle(45,6,40,1);
-            color();
-            setCursor(47,7);
-            clearLine(username.size());
-            setCursor(47,7);
+            initialBox(45,6,40,username.size());
             username="";
-            char firstchar=getchar();
-            while(1)
-            {
-                if(firstchar=='\n')
-                {
-                    index=3;
-                    break;
-                }
-                username+=firstchar;
-                firstchar=getchar();
-            }
+            username=inputText(username);
             drawRectangle(45,6,40,1);
-        }
-        color();
-        if(index==3)
-        {
-            color(RED);
-            drawRectangle(45,10,40,1);
-            color();
-            setCursor(47,11);
-            clearLine(password.size());
-            setCursor(47,11);
-            password="";
-            char firstchar=getchar();
-            while(1)
-            {
-                if(firstchar=='\n')
-                {
-                    index=0;
-                    break;
-                }
-                password+=firstchar;
-                firstchar=getchar();
-            }
-            editCursor(false);
-            if(username=="admin" && password=="admin") return true;
 
+            initialBox(45,10,40,password.size());
+            password="";
+            password=inputText(password);
+
+            editCursor(false);
+            if(username=="admin" && password=="admin")
+                return true;
             setCursor(44,13); color(DARK_RED);
             cout<<"Incorrect email or password please try again";
             color();
             drawRectangle(45,10,40,1);
+            index=0;
             continue;
         }
 
@@ -146,10 +138,8 @@ bool interfaceLogin()
         }
         if(key==KEY_ENTER && index==0)
         {
-            key='0';
-            index=2;
-            setCursor(44,13);
-            cout<<"                                            ";
+            key='0'; index=2;
+            setCursor(44,13); cout<<"                                            ";
         }
     }
     return false;
@@ -158,7 +148,7 @@ bool interfaceLogin()
 bool interfaceRegister()
 {
     system("cls");
-    char key=80;  int index=2;
+    char key='0';  int index=2;
     drawRectangle(50,1,30,1,2); // login box
     setCursor(64,2); cout<<"Register";
     drawRectangle(44,6,20,1); // firstName box
@@ -175,9 +165,9 @@ bool interfaceRegister()
     setCursor(45,21); cout<<"Confirm Password";
     drawRectangle(50,25,14,1); // Again box
     drawRectangle(66,25,14,1); // Exit box
-    string confirmPassword;
+    string confirmPassword="";
     Account newAccount;
-    while(key!=13)
+    while(key!=KEY_ENTER)
     {
         setCursor(52,26);
         if(index==0)  color(BLACK,RED);
@@ -187,142 +177,38 @@ bool interfaceRegister()
         if(index==1)  color(BLACK,RED);
         cout<<"    BACK    "; color();
 
-        if(index==2) // first name
+        if(index==2)
         {
             editCursor(true);
-            color(RED);
-            drawRectangle(44,6,20,1);
-            color();
-            setCursor(46,7);
-            clearLine(newAccount.getFirstName().size());
-            setCursor(46,7);
+            initialBox(44,6,20,newAccount.getFirstName().size());
             newAccount.setFirstName("");
-            char character=getchar();
-            while(1)
-            {
-                if(character=='\n')
-                {
-                    index=3;
-                    break;
-                }
-                newAccount.setFirstName(newAccount.getFirstName()+character);
-                character=getchar();
-            }
+            newAccount.setFirstName(inputText(newAccount.getFirstName()));
             drawRectangle(44,6,20,1);
-        }
-        if(index==3) // last name
-        {
-            editCursor(true);
-            color(RED);
-            drawRectangle(66,6,20,1);
-            color();
-            setCursor(68,7);
-            clearLine(newAccount.getLastName().size());
-            setCursor(68,7);
+
+            initialBox(66,6,20,newAccount.getLastName().size());
             newAccount.setLastName("");
-            char character=getchar();
-            while(1)
-            {
-                if(character=='\n')
-                {
-                    index=4;
-                    break;
-                }
-                newAccount.setLastName(newAccount.getLastName()+character);
-                character=getchar();
-            }
+            newAccount.setLastName(inputText(newAccount.getLastName()));
             drawRectangle(66,6,20,1);
-        }
-        if(index==4) // username
-        {
-            editCursor(true);
-            color(RED);
-            drawRectangle(44,10,42,1);
-            color();
-            setCursor(46,11);
-            clearLine(newAccount.getUserName().size());
-            setCursor(46,11);
+
+            initialBox(44,10,42,newAccount.getUserName().size());
             newAccount.setUserName("");
-            char character=getchar();
-            while(1)
-            {
-                if(character=='\n')
-                {
-                    index=5;
-                    break;
-                }
-                newAccount.setUserName(newAccount.getUserName()+character);
-                character=getchar();
-            }
+            newAccount.setUserName(inputText(newAccount.getUserName()));
             drawRectangle(44,10,42,1);
-        }
-        if(index==5) // email
-        {
-            editCursor(true);
-            color(RED);
-            drawRectangle(44,14,42,1);
-            color();
-            setCursor(46,15);
-            clearLine(newAccount.getEmail().size());
-            setCursor(46,15);
+
+            initialBox(44,14,42,newAccount.getEmail().size());
             newAccount.setEmail("");
-            char character=getchar();
-            while(1)
-            {
-                if(character=='\n')
-                {
-                    index=6;
-                    break;
-                }
-                newAccount.setEmail(newAccount.getEmail()+character);
-                character=getchar();
-            }
+            newAccount.setEmail(inputText(newAccount.getEmail()));
             drawRectangle(44,14,42,1);
 
-        }
-        if(index==6) // password
-        {
-            editCursor(true);
-            color(RED);
-            drawRectangle(44,18,42,1);
-            color();
-            setCursor(46,19);
-            clearLine(newAccount.getPassword().size());
-            setCursor(46,19);
+            initialBox(44,18,42,newAccount.getPassword().size());
             newAccount.setPassword("");
-            char character=getchar();
-            while(1)
-            {
-                if(character=='\n')
-                {
-                    index=7;
-                    break;
-                }
-                newAccount.setPassword(newAccount.getPassword()+character);
-                character=getchar();
-            }
+            newAccount.setPassword(inputText(newAccount.getPassword()));
             drawRectangle(44,18,42,1);
-        }
-        if(index==7) // confirm password
-        {
-            color(RED);
-            drawRectangle(44,22,42,1);
-            color();
-            setCursor(46,23);
-            clearLine(confirmPassword.size());
-            setCursor(46,23);
+
+            initialBox(44,22,42,confirmPassword.size());
             confirmPassword="";
-            char character=getchar();
-            while(1)
-            {
-                if(character=='\n')
-                {
-                    index=0;
-                    break;
-                }
-                confirmPassword+=character;
-                character=getchar();
-            }
+            confirmPassword=inputText(confirmPassword);
+
             editCursor(false);
             bool validation=true;
             if(!newAccount.validationUsername())
@@ -350,8 +236,10 @@ bool interfaceRegister()
                 cout<<"Password does not match";
             }
             color();
-            if(validation) return true;
+            if(validation)
+                return true;
             drawRectangle(44,22,42,1);
+            index=0;
             continue;
         }
         while(1)
@@ -412,17 +300,6 @@ bool interfaceExitGame(int x,int y)
         }
     }
     return index==1 ? true : false;
-
-//    else
-//    {
-//        if(!exitGame)
-//            for(int i=0;i<6;i++)
-//            {
-//                setCursor(35,11+i);
-//                cout<<"                                                 ";
-//            }
-//        return 0;
-//    }
 }
 
 void productDetails(int x,int y,const Product product,User user=CUSTOMER) // Use in Seller , Customer , Admin
@@ -465,12 +342,17 @@ void interfaceSeller(Seller &seller)
     firstPageOfSeller() : This function returns three possibilities
         1- return -1 -> For back
         2- return -2 -> For add Product
-        3- return value between 0 and ( number of product * 3 ) -> For operations on products : show , edit , delete
+        3- return value between 0 and (number of product * 3) -> For operations on products : show , edit , delete
 */
         if(result==-2)
             return ;
-        else if(result==-1)
-            interfaceAddProduct();
+        else if(result==-1) // For add Product
+        {
+            Product product;
+            if(interfaceAddProduct(product))
+                seller.addProduct(product);
+
+        }
         else if(!(result%3)) // For show Product
         {
             productDetails(15,1,seller.getProductConst(result/3),SELLER);  // 3 -> number of buttons in per row
@@ -478,14 +360,15 @@ void interfaceSeller(Seller &seller)
         }
         else if(result%3==1) // For edit Product
         {
-            interfaceEditProduct(seller.getProduct((result-1)/3));
-            productDetails(15,1,seller.getProductConst((result-1)/3),SELLER);
-            setCursor(0,31); system("pause");
+            if(interfaceEditProduct(seller.getProduct((result-1)/3)))
+            {
+                productDetails(15,1,seller.getProductConst((result-1)/3),SELLER);
+                setCursor(0,31); system("pause");
+            }
         }
         else if(result%3==2) // For delete Product
         {
-            productDetails(15,1,seller.getProductConst((result-2)/3),SELLER);  // 3 -> number of buttons in per row
-            setCursor(0,31); system("pause");
+            seller.deleteProductAt((result-2)/3);
         }
     }
 }
@@ -498,6 +381,13 @@ void interfaceCustomer(const Customer &customer)
     while(1)
     {
         int result=firstPageOfCustomer(customer,categories);
+/*
+    firstPageOfSeller() : This function returns Four possibilities
+        1- return -1 -> For back
+        2- return -2 -> For show all Products
+        3- return value between 0 and (number of categories)
+        3- return value between (number of categories) and (number of products)
+*/
         if(result==-1)
             return ;
         else if(result==-2)
@@ -520,7 +410,7 @@ void interfaceCustomer(const Customer &customer)
             { setCursor(0,1); cout<<result<<"  "<<categories[result]; system("pause"); }
         else if(!((result-numCategories)%2))
         {
-            productDetails(15,1,customer.getProductConst(result-numCategories));  // 3 -> number of buttons in per row
+            productDetails(15,1,customer.getProductConst((result%numCategories)/2));  // 2 -> number of buttons in per box
             setCursor(0,31); system("pause");
         }
         else if(((result-numCategories)%2))

@@ -3,8 +3,8 @@
 
 #include <vector>
 #include "Graphics.h"
-#include"customer.h"
-#include"seller.h"
+#include"../users/customer.h"
+#include"../users/seller.h"
 
 enum User {ADMIN,SELLER,CUSTOMER};
 

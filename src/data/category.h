@@ -14,15 +14,20 @@ public:
     Category()
     {}
 
+    Category(string name,int id)
+    {
+        this->name=name;
+        addProductId(id);
+    }
+
 	int getNumberItems()
 	{
 		return itemsId.getLength();
 	}
 
-
-	void setName(string newName)
+	void setName(string name)
 	{
-		name = newName;
+		this->name=name;
 	}
 
 	string getName()
@@ -35,14 +40,14 @@ public:
 		return itemsId.getCopyItem(index);
 	}
 
-	void addItem(int newItemId)
+	void addProductId(int id)
 	{
-		itemsId.insertLast(newItemId);
+		itemsId.insertLast(id);
 	}
 
-	void deleteItem(int id)
+	bool deleteProductId(int id)
 	{
-		itemsId.removeAt(id);
+		return itemsId.remove<int>(id);
 	}
 
 	bool operator ==(Category category)

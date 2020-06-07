@@ -1,6 +1,6 @@
 #include <iostream>
 #include "customer_interface.h"
-#include "product.h"
+#include "../data/product.h"
 #include "Graphics.h"
 
 using namespace std;
@@ -155,7 +155,8 @@ int firstPageOfCustomer(const Customer &customer,vector<string> categories)
     while(key!=KEY_ENTER)
     {
         showCategoriesNames(8,4,5,index,categories);
-        index>=numCategories && index<numberButtons ? productButtons(9,y,numProducts,index-numCategories) : productButtons(9,y,numProducts);
+        index>=numCategories && index<numberButtons ?
+            productButtons(9,y,numProducts,index-numCategories) : productButtons(9,y,numProducts);
         if(index==numberButtons-1)
             color(BLACK,RED);
         setCursor(55,y+10); cout<<"  Show all products  "; color();

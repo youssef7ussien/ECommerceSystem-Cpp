@@ -1,6 +1,8 @@
 #pragma once
+
 #include<iostream>
 using namespace std;
+
 template<class type>
 class List {
 	struct Node {

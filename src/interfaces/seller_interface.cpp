@@ -1,8 +1,8 @@
 #include <iostream>
-#include "seller_interface.h"
-#include "product.h"
-#include "Graphics.h"
 #include <regex>
+#include "Graphics.h"
+#include "seller_interface.h"
+#include "../data/product.h"
 
 using namespace std;
 
@@ -78,8 +78,6 @@ int firstPageOfSeller(const Seller &seller)
             prevPage=false; page--;
         }
 
-       // drawRectangle(55,29,5,1); // prevPage
-       // drawRectangle(67,29,5,1); // nextPage
         for(int i=numberProducts-(remainingProducts+length),y=4 ; i<numberProducts-remainingProducts ; i++, y+=3) // Products information
             productSellerBoxInfo(38,y,seller.getProductConst(i));
         productSellerButton(84,4,length); // Products buttons options
@@ -133,26 +131,67 @@ int firstPageOfSeller(const Seller &seller)
     }
 }
 
-string inputText(string text)
+inline string inputText(string text)
 {
+    editCursor(true);
     char character=getchar();
     while(1)
     {
         if(character=='\n')
         {
+            editCursor(false);
             return text;
-            break;
         }
         text+=character;
         character=getchar();
     }
 }
 
+inline void initialBox(int x,int y,int width,int lengthLine,int height=1)
+{
+    setCursor(x+2,y+1);
+    clearLine(lengthLine);
+    color(RED); drawRectangle(x,y,width,height); color();
+    setCursor(x+2,y+1);
+}
 
-bool interfaceAddProduct()
+bool validationInput(string name,string categoryName,string description,string price)
+{
+    bool validation=true;
+    regex pattern("^[0-9]+([.][0-9]+)?$");
+    if(name=="")
+    {
+        validation=false;
+        setCursor(89,7); color(DARK_RED);
+        cout<<"Incorrect name";
+        color();
+    }
+    if(categoryName=="")
+    {
+        validation=false;
+        setCursor(89,15); color(DARK_RED);
+        cout<<"Incorrect category";
+    }
+    if(description=="")
+    {
+        validation=false;
+        setCursor(102,24); color(DARK_RED);
+        cout<<"Incorrect description";
+    }
+    if(!regex_match(price, pattern))
+    {
+        validation=false;
+        setCursor(89,11); color(DARK_RED);
+        cout<<"Incorrect price";
+    }
+    color();
+    return validation;
+}
+
+bool interfaceAddProduct(Product &product)
 {
     system("cls");
-    char key=80;  int index=2;
+    char key='0';  int index=2;
     drawRectangle(50,1,30,1,2); // login box
     setCursor(64,2); cout<<"Add new Product";
     drawRectangle(44,6,42,1); // Name box
@@ -166,8 +205,7 @@ bool interfaceAddProduct()
     drawRectangle(50,25,14,1); // Again box
     drawRectangle(66,25,14,1); // Exit box
     string price;
-    Product product;
-    while(key!=13)
+    while(key!=KEY_ENTER)
     {
         setCursor(52,26);
         if(index==0)  color(BLACK,RED);
@@ -177,103 +215,35 @@ bool interfaceAddProduct()
         if(index==1)  color(BLACK,RED);
         cout<<"    BACK    "; color();
 
-        if(index==2) // Name
+        if(index==2)
         {
-            editCursor(true);
-            setCursor(46,7);
-            clearLine(product.getName().size());
+            initialBox(44,6,42,product.getName().size());
             product.setName("");
-            color(RED); drawRectangle(44,6,42,1); color();
-            setCursor(46,7);
-            char character=getchar();
-            while(1)
-            {
-                if(character=='\n')
-                {
-                    index=3;
-                    break;
-                }
-                product.setName(product.getName()+character);
-                character=getchar();
-            }
+            product.setName(inputText(product.getName()));
             drawRectangle(44,6,42,1);
-        }
-        if(index==3) // Price
-        {
-            editCursor(true);
-            setCursor(46,11);
-            clearLine(price.size());
+
+            initialBox(44,10,42,price.size());
             price="";
-            color(RED); drawRectangle(44,10,42,1); color();
-            setCursor(46,11);
-            char character=getchar();
-            while(1)
-            {
-                if(character=='\n')
-                {
-                    index=4;
-                    break;
-                }
-                price+=character;
-                character=getchar();
-            }
+            price=inputText(price);
             drawRectangle(44,10,42,1);
-        }
-        if(index==4) // Category
-        {
-            editCursor(true);
-            setCursor(46,15);
-            clearLine(product.getCategoryName().size());
+
+            initialBox(44,14,42,product.getCategoryName().size());
             product.setCategoryName("");
-            color(RED); drawRectangle(44,14,42,1);  color();
-            setCursor(46,15);
-            char character=getchar();
-            while(1)
-            {
-                if(character=='\n')
-                {
-                    index=5;
-                    break;
-                }
-                product.setCategoryName(product.getCategoryName()+character);
-                character=getchar();
-            }
+            product.setCategoryName(inputText(product.getCategoryName()));
             drawRectangle(44,14,42,1);
-        }
-        if(index==5) // Description
-        {
-            setCursor(8,19);
-            clearLine(product.getDescription().size());
+
+
+            initialBox(6,18,117,product.getDescription().size(),4);
             product.setDescription("");
-            color(RED); drawRectangle(6,18,117,4); color();
-            setCursor(8,19);
-            char character=getchar();
-            while(1)
-            {
-                if(character=='\n')
-                {
-                    index=0;
-                    break;
-                }
-                product.setDescription(product.getDescription()+character);
-                character=getchar();
-            }
-            editCursor(false);
-            regex pattern("^[0-9]+([.][0-9]+)?$");
-            if(!regex_match(price, pattern))
-            {
-                setCursor(89,11); color(DARK_RED);
-                cout<<"Incorrect price";
-                color();
-            }
-            else
+            product.setDescription(inputText(product.getDescription()));
+
+            if(validationInput(product.getName(),product.getCategoryName(),product.getDescription(),price))
             {
                 product.setPrice(atof(price.c_str()));
-//                productDetails(15,1,product);
-                system("pause");
                 return true;
             }
             drawRectangle(6,18,117,4);
+            index=0;
             continue;
         }
         while(1)
@@ -290,118 +260,148 @@ bool interfaceAddProduct()
         {
             key='0';
             index=2;
-            setCursor(89,15); cout<<"                       ";
+            setCursor(89,7);   cout<<"                       ";
+            setCursor(89,11);  cout<<"                       ";
+            setCursor(89,15);  cout<<"                       ";
+            setCursor(102,24); cout<<"                       ";
         }
     }
     return false;
 }
 
+string editField(int x,int y,string text,int width,int height,bool isPrice=false)
+{
+    setCursor(89,y+1); cout<<"               ";
+    initialBox(x,y,width,text.size(),height);
+    if(height==4)
+        y-=2;
+    while(1)
+    {
+        text="";
+        text=inputText(text);
+        if(text=="")
+        {
+            setCursor(89,y+1); cout<<"               "; wait(200);
+            setCursor(89,y+1); color(DARK_RED);
+            cout<<"Incorrect input";
+            setCursor(x+2,height==4 ? y+3 : y+1);
+            color();
+        }
+        else
+        {
+            if(isPrice)
+            {
+                regex pattern("^[0-9]+([.][0-9]+)?$");
+                if(!regex_match(text, pattern))
+                {
+                    setCursor(89,y+1); cout<<"               "; wait(200);
+                    setCursor(89,y+1); color(DARK_RED);
+                    cout<<"Incorrect price";
+                    setCursor(x+2,y+1);
+                    clearLine(text.size());
+                    setCursor(x+2,y+1);
+                    color();
+                    continue;
+                }
+            }
+            setCursor(89,y+1); cout<<"               ";
+            color(GREEN); drawRectangle(x, height==4 ? y+2 : y ,width,height);
+            setCursor(89,y+1); cout<<"Done";
+            color();
+            return text;
+        }
+    }
+}
+
 bool interfaceEditProduct(Product *product)
 {
     system("cls");
-    char key=80;  int index=2;
+    char key='0';  int index=0;
     drawRectangle(50,1,30,1,2); // login box
-    setCursor(64,2); cout<<"Add new Product";
+    setCursor(58,2); cout<<"Add new Product";
     drawRectangle(44,6,42,1); // Name box
     setCursor(45,5); cout<<"Name";
+    setCursor(46,7); color(DARK_GRAY); cout<<product->getName(); color();
     drawRectangle(44,10,42,1); // Price box
     setCursor(45,9); cout<<"Price";
+    setCursor(46,11); color(DARK_GRAY); cout<<product->getPrice(); color();
     drawRectangle(44,14,42,1); // Category box
     setCursor(45,13); cout<<"Category";
-    drawRectangle(6,18,117,4); // Description box
+    setCursor(46,15); color(DARK_GRAY); cout<<product->getCategoryName(); color();
+    drawRectangle(5,18,117,4); // Description box
     setCursor(6,17); cout<<"Description";
-    drawRectangle(50,25,14,1); // Again box
-    drawRectangle(66,25,14,1); // Exit box
-    string price;
-    Product tempProduct;
-    while(key!=13)
+    setCursor(7,19); color(DARK_GRAY); cout<<product->getDescription(); color();
+    for(int i=0 ; i<3 ; i++)
+        drawRectangle(33,4*i+6,8,1);
+    drawRectangle(20,15,8,1);
+    drawRectangle(54,25,22,1); // DONE box
+    while(key!=KEY_ENTER)
     {
-        setCursor(52,26);
-        if(index==0)  color(BLACK,RED);
-        cout<<"   AGAIN    "; color();
-
-        setCursor(68,26);
-        if(index==1)  color(BLACK,RED);
-        cout<<"    BACK    "; color();
-
-        if(index==2) // Name
+        if(index==6) // Name
         {
-            editCursor(true);
-            setCursor(46,7);
-            clearLine(tempProduct.getName().size());
-            tempProduct.setName("");
-            color(RED); drawRectangle(44,6,42,1); color();
-            setCursor(46,7);
-            tempProduct.setName(inputText(tempProduct.getName()));
+            product->setName(editField(44,6,product->getName(),42,1));
+            index=1;
+        }
+        else if(index==7) // Price
+        {
+            string price=to_string(product->getPrice());
+            price=editField(44,10,price,42,1,true);
+
+            product->setPrice(atof(price.c_str()));
+            index=2;
+        }
+        else if(index==8) // Category
+        {
+            product->setCategoryName(editField(44,14,product->getCategoryName(),42,1));
             index=3;
-            drawRectangle(44,6,42,1);
         }
-        if(index==3) // Price
+        else if(index==9) // Description
         {
-            setCursor(46,11);
-            clearLine(price.size());
-            price="";
-            color(RED); drawRectangle(44,10,42,1); color();
-            setCursor(46,11);
-            price=inputText(price);
+            product->setDescription(editField(5,18,product->getDescription(),117,4));
             index=4;
-            drawRectangle(44,10,42,1);
         }
-        if(index==4) // Category
-        {
-            setCursor(46,15);
-            clearLine(tempProduct.getCategoryName().size());
-            tempProduct.setCategoryName("");
-            color(RED); drawRectangle(44,14,42,1);  color();
-            setCursor(46,15);
-            tempProduct.setCategoryName(inputText(tempProduct.getCategoryName()));
-            index=5;
-            drawRectangle(44,14,42,1);
-        }
-        if(index==5) // Description
-        {
-            setCursor(8,19);
-            clearLine(tempProduct.getDescription().size());
-            tempProduct.setDescription("");
-            color(RED); drawRectangle(6,18,117,4); color();
-            setCursor(8,19);
-            tempProduct.setDescription(inputText(tempProduct.getDescription()));
-            index=0;
-            editCursor(false);
-            regex pattern("^[0-9]+([.][0-9]+)?$");
-            if(!regex_match(price, pattern))
-            {
-                setCursor(89,11); color(DARK_RED);
-                cout<<"Incorrect price";
-                color();
-            }
-            else
-            {
-                tempProduct.setPrice(atof(price.c_str()));
-                product->setName(tempProduct.getName());
-                product->setPrice(tempProduct.getPrice());
-                product->setCategoryName(tempProduct.getCategoryName());
-                product->setDescription(tempProduct.getDescription());
-                return true;
-            }
-            drawRectangle(6,18,117,4);
-            continue;
-        }
+
+        setCursor(35,7);
+        if(index==0)  color(BLACK,RED);
+        cout<<" Edit "; color();
+
+        setCursor(35,11);
+        if(index==1)  color(BLACK,RED);
+        cout<<" Edit "; color();
+
+        setCursor(35,15);
+        if(index==2)  color(BLACK,RED);
+        cout<<" Edit "; color();
+
+        setCursor(22,16);
+        if(index==3)  color(BLACK,RED);
+        cout<<" Edit "; color();
+
+        setCursor(56,26);
+        if(index==4)  color(BLACK,RED);
+        cout<<"        DONE        "; color();
+
         while(1)
         {
             key=getch();
             if(key==KEY_RIGHT)
-                { index=(index+1)%2; break; }
+                { index=(index+1)%5; break; }
             else if(key==KEY_LEFT)
-                { index=(index+3)%2; break; }
+                { index=(index+6)%5; break; }
+            else if(key==KEY_DOWN)
+                { index=(index+1)%5; break; }
+            else if(key==KEY_UP)
+                { index=(index+6)%5; break; }
             else if(key==KEY_ENTER)
-                break;
-        }
-        if(key==KEY_ENTER && index==0)
-        {
-            key='0';
-            index=2;
-            setCursor(89,15); cout<<"                       ";
+            {
+                key='0';
+                if(index>=0 && index<=3)
+                    { index+=6; break; }
+                else if(index==4)
+                    return true;
+            }
+            else if(key==KEY_ESC)
+                return false;
         }
     }
     return false;

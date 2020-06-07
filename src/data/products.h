@@ -15,7 +15,12 @@ public:
 		return products.getItem(id);
 	}
 
-	int getLength()
+	Product getProductConst(int index) const
+	{
+		return products.getCopyItem(index);
+	}
+
+	int getLength() const
 	{
 		return products.getLength();
 	}
@@ -23,6 +28,11 @@ public:
 	bool deleteProduct(int id)
 	{
 		return products.remove<int>(id);
+	}
+
+	bool deleteProductAt(int index)
+	{
+		return products.removeAt(index);
 	}
 
 	void addProduct(Product product)

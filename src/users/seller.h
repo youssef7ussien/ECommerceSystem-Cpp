@@ -1,9 +1,9 @@
 #pragma once
 
 #include<iostream>
-#include "products.h"
+#include "../data/products.h"
 #include "account.h"
-#include "categories.h"
+#include "../data/categories.h"
 
 using namespace std;
 
@@ -23,6 +23,10 @@ public:
     {
         return &products;
     }
+    Categories* getCategoriesc()
+    {
+        return &categories;
+    }
     Product* getProduct(int index);
     Product getProductConst(int index) const // for test
     {
@@ -30,6 +34,8 @@ public:
     }
     Categories getCategories() const;
     bool addProduct(Product item);
+    bool deleteProduct(int index);
+    bool deleteProductAt(int);
     bool updateItemName(int Id,string newName);
     bool updateItemDescription(int Id,string newDescription);
     bool updateItemPrice(int Id,int newPrice);

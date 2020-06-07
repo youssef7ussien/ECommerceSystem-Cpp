@@ -13,11 +13,11 @@ Products products) : Account(firstName,lastName,userName,email,password)
 }
 
 Customer::Customer(string firstName, string lastName, string userName, string email, string password,
-Products products, Categories category) : Account(firstName,lastName,userName,email,password)
+Products products, Categories categories) : Account(firstName,lastName,userName,email,password)
 {
     id=count++;
     this->products=products;
-    this->categories=category;
+    this->categories=categories;
 }
 
 int Customer::getId() const

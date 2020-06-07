@@ -8,6 +8,7 @@ Product::Product()
     this->categoryName = "";
     this->price = 0.0;
     this->description = "";
+    this->id=-1;
 }
 
 Product::Product(string name, string categoryName , double price, string description)

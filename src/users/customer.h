@@ -1,9 +1,9 @@
 #ifndef E_COMMERCE_SYSTEM_CUSTOMER_H
 #define E_COMMERCE_SYSTEM_CUSTOMER_H
 
-#include "products.h"
+#include "../data/products.h"
 #include "account.h"
-#include "categories.h"
+#include "../data/categories.h"
 
 class Customer : public Account {
     static int count;

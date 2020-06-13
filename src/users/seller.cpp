@@ -4,19 +4,17 @@ int Seller::count=0;
 Seller::Seller() : Account()
 {}
 
-//Seller::Seller(string firstName, string lastName, string userName, string email, string password,
-//        Products products, Categories category) : Account(firstName,lastName,userName,email,password)
-//{
-//    id=count++;
-//    this->products=products;
-//    this->categories=category;
-//}
-
-Seller::Seller(string firstName, string lastName, string userName, string email, string password,Products products)
-    : Account(firstName,lastName,userName,email,password)
+Seller::Seller(string firstName, string lastName, string userName, string email, string password)
+        : Account(firstName,lastName,userName,email,password)
 {
     id=count++;
-    this->products=products;
+}
+
+Seller::Seller(string firstName, string lastName, string userName, string email, string password,
+        List<int> productsId) : Account(firstName,lastName,userName,email,password)
+{
+    id=count++;
+    this->productsId=productsId;
 }
 
 int Seller::getId() const
@@ -24,81 +22,56 @@ int Seller::getId() const
     return id;
 }
 
-Products Seller::getProducts() const
+int Seller::numberProducts() const
 {
-    return products;
+    return productsId.getLength();
 }
 
-Product* Seller::getProduct(int index)
+bool Seller::addProduct(int productId)
 {
-    return products[index];
-}
-
-Categories Seller::getCategories() const
-{
-    return categories;
-}
-
-bool Seller::addProduct(Product product)
-{
-    if(!categories.searchCategory(product.getCategoryName()))
-        categories.addCategory(Category(product.getCategoryName(),product.getId()));
-    else
-        categories[product.getCategoryName()]->addProductId(product.getId());
-
-    products.addProduct(product);
+    productsId.insertLast(productId);
     return true;
 }
 
 bool Seller::deleteProduct(int id)
 {
-    return products.deleteProduct(id);
+    return productsId.remove<int>(id);
 }
 
-bool Seller::deleteProductAt(int index)
+int Seller::deleteProductAt(int index)
 {
-    return products.deleteProductAt(index);
+    int id=*productsId[index];
+    productsId.removeAt(index);
+    return id;
 }
-//
-//bool Seller::updateItemName(int Id,string newName)
-//{
-//    products->updateName(Id,newName);
-//    return true;
-//}
-//bool Seller::updateItemDescription(int Id,string newDescription)
-//{
-//    products->updateDescription(Id,newDescription);
-//    return true;
-//}
-//
-//bool Seller::updateItemPrice(int Id,int newPrice)
-//{
-//    products->updatePrice(Id,newPrice);
-//    return true;
-//}
-//
-//bool Seller::addCategory(Category Category1)
-//{
-//    categories.addCategory(Category1);
-//    return true;
-//}
-//
-//bool Seller::removeCategory(string name)
-//{
-//    categories.removeCategory(name);
-//    return true;
-//}
-//
-//bool Seller::addItemToCategory(string name,int itemId)
-//{
-//    categories.getCategory(name)->addItem(itemId);
-//    return true;
-//}
-//
-//bool Seller::removeItemFromCategory(string name,int itemId)
-//{
-//    categories.getCategory(name)->deleteItem(itemId);
-//    return true;
-//}
-//
 
+int Seller::getProductId(int index) const
+{
+    return productsId.getCopyItem(index);
+}
+
+void Seller::getProducts(Product *product[],List<Product> products)
+{
+    for(int i=0 ; i<productsId.getLength() ; i++)
+        product[i]=products.getItem(productsId.getCopyItem(i));
+}
+
+bool Seller::operator ==(string username) const
+{
+    return (this->userName==username);
+}
+
+bool Seller::operator !=(string username) const
+{
+    return (this->userName!=username);
+}
+
+bool Seller::operator ==(int id) const
+{
+    return (this->id==id);
+}
+
+bool Seller::operator !=(int id) const
+{
+    return (this->id!=id);
+}

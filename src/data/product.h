@@ -21,6 +21,7 @@ public:
 	bool operator !=(int id) const;
 	bool operator ==(string name) const;
 	bool operator !=(string name) const;
+	int generateId();
 	int getId() const;
 	string getName() const;
 	string getCategoryName() const;

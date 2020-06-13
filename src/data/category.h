@@ -8,7 +8,7 @@ using namespace std;
 
 class Category {
 	string name;
-	List<int> itemsId;
+	List<int> productsId;
 public:
 
     Category()
@@ -20,9 +20,14 @@ public:
         addProductId(id);
     }
 
-	int getNumberItems()
+	int numberProducts() const
 	{
-		return itemsId.getLength();
+		return productsId.getLength();
+	}
+
+	string getName() const
+	{
+		return name;
 	}
 
 	void setName(string name)
@@ -30,24 +35,24 @@ public:
 		this->name=name;
 	}
 
-	string getName()
+	int getProductId(int index) const
 	{
-		return name;
+		return productsId.getCopyItem(index);
 	}
 
-	int getProductId(int index)
+	List<int> getProductsId() const
 	{
-		return itemsId.getCopyItem(index);
+		return productsId;
 	}
 
 	void addProductId(int id)
 	{
-		itemsId.insertLast(id);
+		productsId.insertLast(id);
 	}
 
 	bool deleteProductId(int id)
 	{
-		return itemsId.remove<int>(id);
+		return productsId.remove<int>(id);
 	}
 
 	bool operator ==(Category category)
@@ -68,5 +73,10 @@ public:
 	bool operator !=(string name)
 	{
 		return (this->name != name);
+	}
+
+	int operator [](int index)
+	{
+		return *productsId[index];
 	}
 };

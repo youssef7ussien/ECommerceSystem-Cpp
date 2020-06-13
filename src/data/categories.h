@@ -3,7 +3,7 @@
 #include "hash_table.h"
 
 class Categories {
-	Hash<Category> categories;
+	List<Category> categories;
 public:
 
 
@@ -14,24 +14,29 @@ public:
 
 	void addCategory(Category category)
 	{
-		categories.insert(category);
+		categories.insertLast(category);
 	}
 
 	void removeCategory(string name)
 	{
-		categories.remove(name);
+		categories.remove<string>(name);
 	}
 
 	bool searchCategory(string name)
 	{
 	    if(getLength()==0)
             return false;
-	    return categories.search(name);
+	    return categories.search<string>(name);
+	}
+
+    Category getCategoryConst(int index) const
+	{
+		return categories.getCopyItem(index);
 	}
 
 	Category *getCategory(string name)
 	{
-		return categories.get(name);
+		return categories.getItem(name);
 	}
 
 	Category *operator [](string name)

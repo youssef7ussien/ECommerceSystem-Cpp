@@ -145,6 +145,72 @@ bool interfaceLogin()
     return false;
 }
 
+bool interfaceLoginSeller(const Sellers sellers,int &seller)
+{
+    system("cls");
+    char key='0';  int index=2;
+    string email="",password="";
+    drawRectangle(50,1,30,1,2); // login box
+    setCursor(62,2); cout<<"Login";
+    drawRectangle(45,6,40,1); // email box
+    setCursor(46,5); cout<<"Enter email";
+    drawRectangle(45,10,40,1); // password box
+    setCursor(46,9); cout<<"Enter password";
+    drawRectangle(50,14,14,1); // Again box
+    drawRectangle(66,14,14,1); // Exit box
+
+    while(key!=KEY_ENTER)
+    {
+        setCursor(52,15);
+        if(index==0)  color(BLACK,RED);
+        cout<<"   AGAIN    "; color();
+
+        setCursor(68,15);
+        if(index==1)  color(BLACK,RED);
+        cout<<"    BACK    "; color();
+
+        if(index==2)
+        {
+            editCursor(true);
+            initialBox(45,6,40,email.size());
+            email="";
+            email=inputText(email);
+            drawRectangle(45,6,40,1);
+
+            initialBox(45,10,40,password.size());
+            password="";
+            password=inputText(password);
+
+            editCursor(false);
+            if(sellers.checkSeller(email,password,seller))
+                return true;
+            setCursor(44,13); color(DARK_RED);
+            cout<<"Incorrect email or password please try again";
+            color();
+            drawRectangle(45,10,40,1);
+            index=0;
+            continue;
+        }
+
+        while(1)
+        {
+            key=getch();
+            if(key==KEY_RIGHT)
+                { index=(index+1)%2; break; }
+            else if(key==KEY_LEFT)
+                { index=(index+3)%2; break; }
+            else if(key==KEY_ENTER)
+                break;
+        }
+        if(key==KEY_ENTER && index==0)
+        {
+            key='0'; index=2;
+            setCursor(44,13); cout<<"                                            ";
+        }
+    }
+    return false;
+}
+
 bool interfaceRegister()
 {
     system("cls");
@@ -333,88 +399,131 @@ void productDetails(int x,int y,const Product product,User user=CUSTOMER) // Use
     }
 }
 
-void interfaceSeller(Seller &seller)
+void interfaceSeller(Seller *seller,Products &products)
 {
     while(1)
     {
-        int result=firstPageOfSeller(seller);//,length=seller.getProducts().getLength();
-/*
-    firstPageOfSeller() : This function returns three possibilities
-        1- return -1 -> For back
-        2- return -2 -> For add Product
-        3- return value between 0 and (number of product * 3) -> For operations on products : show , edit , delete
-*/
+        Product *sellerProducts[seller->numberProducts()];
+        seller->getProducts(sellerProducts,products.getProducts());
+        int result=firstPageOfSeller(*seller,sellerProducts);
+
         if(result==-2)
             return ;
         else if(result==-1) // For add Product
         {
             Product product;
             if(interfaceAddProduct(product))
-                seller.addProduct(product);
+            {
+                product.generateId();
+                products.addProduct(product);
+                seller->addProduct(product.getId());
+            }
 
         }
         else if(!(result%3)) // For show Product
         {
-            productDetails(15,1,seller.getProductConst(result/3),SELLER);  // 3 -> number of buttons in per row
+            productDetails(15,1,*sellerProducts[result/3],SELLER);  // 3 -> number of buttons in per row
             setCursor(0,31); system("pause");
         }
         else if(result%3==1) // For edit Product
         {
-            if(interfaceEditProduct(seller.getProduct((result-1)/3)))
+            if(interfaceEditProduct(sellerProducts[(result-1)/3]))
             {
-                productDetails(15,1,seller.getProductConst((result-1)/3),SELLER);
+                productDetails(15,1,*sellerProducts[(result-1)/3],SELLER);
                 setCursor(0,31); system("pause");
             }
         }
         else if(result%3==2) // For delete Product
         {
-            seller.deleteProductAt((result-2)/3);
+            products.deleteProduct(seller->deleteProductAt((result-2)/3));
         }
     }
 }
 
-void interfaceCustomer(const Customer &customer)
+void showAllProducts(Customer &customer,const List<Product> &products)
 {
-    system("cls");
-    vector<string> categories={"Cameras","Books","Furniture","Electronics","Kitchen"};
-    int numCategories=categories.size();
     while(1)
     {
-        int result=firstPageOfCustomer(customer,categories);
-/*
-    firstPageOfSeller() : This function returns Four possibilities
-        1- return -1 -> For back
-        2- return -2 -> For show all Products
-        3- return value between 0 and (number of categories)
-        3- return value between (number of categories) and (number of products)
-*/
+        int result=showProducts(customer.getName(),products);
+        if(result==-1)
+            break;
+        else if(!(result%2)) // For More
+        {
+            productDetails(15,1,products.getCopyItem(result/2));  // 2 -> number of buttons in per box
+            setCursor(0,31); system("pause");
+        }
+        else if(result%2) // For Buy
+        {
+            customer.addToCart(products.getCopyItem(result/2));
+//                productDetails(15,1,products.getProductConst(re/2));
+            buyDialog(customer,products.getCopyItem(result/2).getName());
+        }
+    }
+}
+
+void showProductsOfCategory(Customer &customer,const Products &products,Category category)
+{
+    while(1)
+    {
+        int result=showProducts(
+            customer.getName(),
+            products.getProductsOfCategory(category.getProductsId()),
+            category.getName()
+        );
+        if(result==-1)
+            break;
+        else if(!(result%2)) // For More
+        {
+            productDetails(15,1,products.getProductConstId(category[result/2]));  // 2 -> number of buttons in per box
+            setCursor(0,31); system("pause");
+        }
+        else if(result%2) // For Buy
+        {
+            customer.addToCart(products.getProductConstId(category[result/2]));
+            buyDialog(customer,products.getProductConst((category[result/2])).getName());
+        }
+    }
+}
+
+void interfaceCustomer(const Products &products)
+{
+    Customer customer(nameDialog());
+    system("cls");
+    int numCategories=products.categoriesLength();
+    if(numCategories>10) numCategories=10;
+    while(1)
+    {
+        int result=firstPageOfCustomer(customer,products);
         if(result==-1)
             return ;
         else if(result==-2)
+            searchPage(products.getProducts());
+        else if(result==-3)
+            showCart(customer,customer.getCart());
+        else if(result==-4)
         {
-            int re=showAllProducts(customer.getProducts());
-            if(re==-1)
-                continue;
-            else if(!(re%2)) // For More
+            while(1)
             {
-                productDetails(15,1,customer.getProductConst(re/2));  // 2 -> number of buttons in per box
-                setCursor(0,31); system("pause");
-            }
-            else if(re%2) // For Buy
-            {
-                productDetails(15,1,customer.getProductConst(re/2));
-                setCursor(0,31); system("pause");
+                int index=showCategories(customer.getName(),products.getCategories());
+                if(index==-1)
+                    break;
+                showProductsOfCategory(customer,products,products.getCategories().getCopyItem(index));
             }
         }
+        else if(result==-5)
+            showAllProducts(customer,products.getProducts());
         else if(result<numCategories)
-            { setCursor(0,1); cout<<result<<"  "<<categories[result]; system("pause"); }
+             showProductsOfCategory(customer,products,products.getCategories().getCopyItem(result));
         else if(!((result-numCategories)%2))
         {
-            productDetails(15,1,customer.getProductConst((result%numCategories)/2));  // 2 -> number of buttons in per box
+            productDetails(15,1,products.getProductConst((result-numCategories)/2));  // 2 -> number of buttons in per box
             setCursor(0,31); system("pause");
         }
         else if(((result-numCategories)%2))
-            { setCursor(0,23); cout<<result%numCategories<<"  buttons :"<<result%2<<" , Product no. "<<(result%numCategories)/2; system("pause"); }
+        {
+            customer.addToCart(products.getProductConst((result-numCategories)/2));
+            buyDialog(customer,products.getProductConst((result-numCategories)/2).getName());
+        }
     }
 
 }

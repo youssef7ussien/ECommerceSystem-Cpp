@@ -70,7 +70,7 @@ void clearLine(int);
 void wait(int);
 void drawRectangle(int, int, int, int,int style=1);
 void drawCircle(int, int, int);
-void drawLine(int, int, int, int);
+void drawLine(int, int, int, int,Colors colorLine=LIGHT_GRAY);
 void setFillStyle(FillStyle);
 
 #endif // GRAPHICS_H_INCLUDED

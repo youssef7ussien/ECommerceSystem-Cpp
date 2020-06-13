@@ -175,17 +175,6 @@ public:
         return &cur->item;
 	}
 
-	type getItemId(int element) const
-	{
-		Node *cur = head;
-		while (cur != NULL) {
-			if (cur->item == element)
-                return cur->item;
-			cur = cur->next;
-		}
-        return cur->item;
-	}
-
 	type getCopyItem(int index) const
 	{
         Node *cur = head;
@@ -194,20 +183,20 @@ public:
         return cur->item;
 	}
 
-	template<typename secondType>
-	type search(secondType element) const
-	{
-		Node *cur = head;
-		while (cur != NULL) {
-			if (cur->item == element)
-			    return cur->item;
-			cur = cur->next;
-		}
-		return cur->item;
-	}
+//	template<typename secondType>
+//	type search(secondType element)
+//	{
+//		Node *cur = head;
+//		while (cur != NULL) {
+//			if (cur->item == element)
+//			    return cur->item;
+//			cur = cur->next;
+//		}
+//		return cur->item;
+//	}
 
 	template<typename secondType>
-	bool contain(secondType element) const
+	bool search(secondType element)
 	{
 		Node *cur = head;
 		while (cur != NULL) {

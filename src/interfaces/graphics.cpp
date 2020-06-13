@@ -1,8 +1,6 @@
 #include "Graphics.h"
 #include <iostream>
 using namespace std;
-//HANDLE hConsole;
-//char fill_char;
 
 void initConsole()
 {
@@ -142,8 +140,9 @@ void drawCircle(int xC, int yC, int radius)
 	}
 }
 
-void drawLine(int x1, int y1, int x2, int y2)
+void drawLine(int x1, int y1, int x2, int y2,Colors colorLine)
 {
+    color(colorLine);
 	double deltaX=x1-x2, deltaY=y1-y2;
 	if(fabs(deltaX)>fabs(deltaY))
 	{
@@ -164,17 +163,5 @@ void drawLine(int x1, int y1, int x2, int y2)
             cout<<char(179);
         }
 	}
+	color();
 }
-
-//void setFillStyle(FillStyle fillStyle)
-//{
-//	switch (fillStyle)
-//	{
-//	case SOLID_FILL:    fillChar='\xB3'; break;
-//	case DARK_FILL:     fillChar='\xB0'; break;
-//	case MEDIUM_FILL:   fillChar='\xB1'; break;
-//	case LIGHT_FILL:    fillChar='\xB2'; break;
-//	case X_FILL:        fillChar='X'; break;
-//    case O_FILL:        fillChar='O'; break;
-//	}
-//}

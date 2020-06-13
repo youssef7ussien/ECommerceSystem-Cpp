@@ -70,6 +70,12 @@ public:
         return table[index][name];
     }
 
+    type getCopy(string name)
+    {
+        int index=hashFunction(name);
+        return &table[index][name];
+    }
+
 //    bool search(type &item,string name)
 //    {
 //        int index=hashFunction(name);

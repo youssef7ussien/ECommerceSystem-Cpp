@@ -13,11 +13,11 @@ Product::Product()
 
 Product::Product(string name, string categoryName , double price, string description)
 {
-    this->name = name;
-    this->categoryName = categoryName;
-    this->price = price;
-    this->description = description;
-    id = count++;
+    this->name=name;
+    this->categoryName=categoryName;
+    this->price=price;
+    this->description=description;
+    id=count++;
 }
 
 bool Product::operator ==(Product product) const
@@ -55,6 +55,12 @@ bool Product::operator !=(string name) const
 int Product::getId() const
 {
     return id;
+}
+
+int Product::generateId()
+{
+     id=count++;
+     return id;
 }
 
 string Product::getName() const

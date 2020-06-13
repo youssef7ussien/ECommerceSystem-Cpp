@@ -6,11 +6,11 @@
 
 using namespace std;
 
-void productSellerBoxInfo(int x,int y,const Product product)
+void productSellerBoxInfo(int x,int y,int number,const Product product)
 {
     drawRectangle(x,y,44,1);
     setCursor(x+5,y); cout<<char(194);
-    setCursor(x+2,y+1); cout<<product.getId();
+    setCursor(x+2,y+1); cout<<number;
     setCursor(x+5,y+1); cout<<char(179);
     setCursor(x+5,y+2); cout<<char(193);
     setCursor(x+7,y+1); cout<<product.getName();
@@ -47,9 +47,9 @@ void productSellerButtonName(int x,int y,int numberProduct,int index)
     color();
 }
 
-int firstPageOfSeller(const Seller &seller)
+int firstPageOfSeller(const Seller &seller,Product *products[])
 {
-    int numberProducts=seller.getProducts().getLength(), remainingProducts=0, page=1, length=0;
+    int numberProducts=seller.numberProducts(), remainingProducts=0, page=1, length=0;
     bool nextPage=false, prevPage=false;
     if(numberProducts>8) // 8 -> The number of products per page
         { remainingProducts=numberProducts-8; length=8; }
@@ -61,6 +61,9 @@ int firstPageOfSeller(const Seller &seller)
         system("cls");
         char key='0'; int index=0;
         drawRectangle(6,1,117,1,2); // Status Bar
+        setCursor(8,2); cout<<"Hello, "; color(RED); cout<<seller.getFirstName();
+        setCursor(104,2); color(DARK_GRAY); cout<<"Press ";
+        color(BROWN); cout<<"Esc"; color(DARK_GRAY); cout<<" to Logout"; color();
         drawRectangle(13,4,20,1); // Option add Product Box
         drawLine(36,5,36,20);
         if(nextPage)
@@ -79,7 +82,7 @@ int firstPageOfSeller(const Seller &seller)
         }
 
         for(int i=numberProducts-(remainingProducts+length),y=4 ; i<numberProducts-remainingProducts ; i++, y+=3) // Products information
-            productSellerBoxInfo(38,y,seller.getProductConst(i));
+            productSellerBoxInfo(38,y,i+1,*products[i]);
         productSellerButton(84,4,length); // Products buttons options
         setCursor(64,30); cout<<page; // page number
         length=length*3+3; // *3 -> number of buttons in per row || +3 -> next , previous , add product
@@ -95,7 +98,7 @@ int firstPageOfSeller(const Seller &seller)
 
             if(index==length-3)
                 color(BLACK,RED);
-            setCursor(15,5); cout<<"   Add Product   "; color(); // Option add Product Boxe
+            setCursor(15,5); cout<<"   Add Product   "; color(); // Option add Product Box
             while(1)
             {
                 key=getch();

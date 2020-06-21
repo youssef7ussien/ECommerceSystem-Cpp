@@ -1,12 +1,29 @@
 #include "account.h"
 #include <regex>
 
-Account::Account(const string &firstName, const string &lastName, const string &userName, const string &email,
-                 const string &password) : firstName(firstName), lastName(lastName), userName(userName), email(email),
-                                           password(password) {}
-
 Account::Account() : firstName(""), lastName(""), userName(""), email(""), password("")
 {}
+
+Account::Account(const string &firstName, const string &lastName, const string &userName, const string &email,
+                 const string &password)
+{
+    this->firstName=firstName;
+    this->lastName=lastName;
+    this->userName=userName;
+    this->email=email;
+    this->password=password;
+}
+
+//Account::Account(const Account &account)
+//{
+//    this->firstName= account.getFirstName();
+//    this->lastName= account.getFirstName();
+//    this->userName= account.getUserName();
+//    this->email= account.getEmail();
+//    this->password= account.getPassword();
+//}
+
+
 
 string Account::getName() const
 {
@@ -63,35 +80,35 @@ void Account::setPassword(string password)
     this->password=password;
 }
 
-bool Account::validationName()
+bool Account::validationName() const
 {
     regex pattern("^([A-Z ._a-z0-9]){4,20}$");
 
     return regex_match(getFirstName(), pattern) && regex_match(getLastName(), pattern);
 }
 
-bool Account::validationEmail()
+bool Account::validationEmail() const
 {
     regex pattern("^[\\w\\._]+@[\\w\\._]+\\.\\w{2,4}$");
 
     return regex_match(getEmail(), pattern);
 }
 
-bool Account::validationUsername()
+bool Account::validationUsername() const
 {
     regex pattern("^([A-Z._a-z0-9]){4,20}$");
 
     return regex_match(getUserName(), pattern);
 }
 
-bool Account::validationPassword()
+bool Account::validationPassword() const
 {
     regex pattern("^([A-Z.@_a-z0-9]){8,20}$");
 
     return regex_match(getPassword(), pattern);
 }
 
-bool Account::confirmPassword(string password)
+bool Account::confirmPassword(string password) const
 {
     return getPassword()==password;
 }

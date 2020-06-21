@@ -2,11 +2,10 @@
 #include <regex>
 #include "Graphics.h"
 #include "seller_interface.h"
-#include "../data/product.h"
 
 using namespace std;
 
-void productSellerBoxInfo(int x,int y,int number,const Product product)
+void productSellerBoxInfo(int x,int y,int number,const Product &product)
 {
     drawRectangle(x,y,44,1);
     setCursor(x+5,y); cout<<char(194);
@@ -76,7 +75,7 @@ int firstPageOfSeller(const Seller &seller,Product *products[])
         }
         else if(prevPage)
         {
-            remainingProducts+=(length-2)/3;
+            remainingProducts=remainingProducts+(length-3)/3;
             length=8;
             prevPage=false; page--;
         }
@@ -84,17 +83,17 @@ int firstPageOfSeller(const Seller &seller,Product *products[])
         for(int i=numberProducts-(remainingProducts+length),y=4 ; i<numberProducts-remainingProducts ; i++, y+=3) // Products information
             productSellerBoxInfo(38,y,i+1,*products[i]);
         productSellerButton(84,4,length); // Products buttons options
-        setCursor(64,30); cout<<page; // page number
+        setCursor(64,33); cout<<page; // page number
         length=length*3+3; // *3 -> number of buttons in per row || +3 -> next , previous , add product
         while(key!=KEY_ENTER)
         {
             productSellerButtonName(86,4,(length-3)/3,index); // *3 -> number of buttons in per row || +3 -> next , previous , add product
             if(index==length-2)
-                remainingProducts+12<numberProducts ? color(BLACK,RED) : color(BLACK,DARK_GRAY);
-            setCursor(59,30); cout<<" < "; color();
+                remainingProducts+8<numberProducts ? color(BLACK,RED) : color(BLACK,DARK_GRAY);
+            setCursor(59,33); cout<<" < "; color();
             if(index==length-1)
                 remainingProducts ? color(BLACK,RED) : color(BLACK,DARK_GRAY);
-            setCursor(67,30); cout<<" > "; color();
+            setCursor(67,33); cout<<" > "; color();
 
             if(index==length-3)
                 color(BLACK,RED);
@@ -134,9 +133,10 @@ int firstPageOfSeller(const Seller &seller,Product *products[])
     }
 }
 
-inline string inputText(string text)
+inline string inputText()
 {
     editCursor(true);
+    string text="";
     char character=getchar();
     while(1)
     {
@@ -207,7 +207,7 @@ bool interfaceAddProduct(Product &product)
     setCursor(6,17); cout<<"Description";
     drawRectangle(50,25,14,1); // Again box
     drawRectangle(66,25,14,1); // Exit box
-    string price;
+    string price="";
     while(key!=KEY_ENTER)
     {
         setCursor(52,26);
@@ -221,24 +221,20 @@ bool interfaceAddProduct(Product &product)
         if(index==2)
         {
             initialBox(44,6,42,product.getName().size());
-            product.setName("");
-            product.setName(inputText(product.getName()));
+            product.setName(inputText());
             drawRectangle(44,6,42,1);
 
             initialBox(44,10,42,price.size());
-            price="";
-            price=inputText(price);
+            price=inputText();
             drawRectangle(44,10,42,1);
 
             initialBox(44,14,42,product.getCategoryName().size());
-            product.setCategoryName("");
-            product.setCategoryName(inputText(product.getCategoryName()));
+            product.setCategoryName(inputText());
             drawRectangle(44,14,42,1);
 
 
             initialBox(6,18,117,product.getDescription().size(),4);
-            product.setDescription("");
-            product.setDescription(inputText(product.getDescription()));
+            product.setDescription(inputText());
 
             if(validationInput(product.getName(),product.getCategoryName(),product.getDescription(),price))
             {
@@ -281,7 +277,7 @@ string editField(int x,int y,string text,int width,int height,bool isPrice=false
     while(1)
     {
         text="";
-        text=inputText(text);
+        text=inputText();
         if(text=="")
         {
             setCursor(89,y+1); cout<<"               "; wait(200);

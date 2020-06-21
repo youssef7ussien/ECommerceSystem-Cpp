@@ -51,14 +51,6 @@ void setCursor(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),cursorPosition);
 }
 
-void clearScreen()
-{
-	setCursor(0, 24);
-	for (int j = 0; j < 25; j++)
-		_putch('\n');
-	setCursor(0, 0);
-}
-
 void wait(int milliseconds)
 {
 	Sleep(milliseconds);
@@ -72,11 +64,19 @@ void clearLine(int length)
     }
 }
 
+void clearMultiLines(int x,int y,int numberLines,int length)
+{
+	for (int i=0 ; i<numberLines ; i++)
+    {
+        setCursor(x,i+y); clearLine(length);
+    }
+}
+
 void drawRectangle(int x, int y, int width, int height,int style)
 {
     height+=1;
     width+=2;
-    char topLeft,topRight,bottomLeft,bottomRight,verticalLine,horizontalLine;
+    char topLeft='0',topRight='0',bottomLeft='0',bottomRight='0',verticalLine='0',horizontalLine='0';
     switch(style)
     {
         case 1:

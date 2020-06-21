@@ -13,14 +13,15 @@ class List {
 	Node *head, *tail;
 public:
 
-	List() {
-		tail = head = NULL;
-		length = 0;
+	List()
+	{
+		tail=head=NULL;
+		length=0;
 	}
 
 	bool isEmpty() const
 	{
-		return (length == 0);
+		return (length==0);
 	}
 
 	int getLength() const
@@ -31,49 +32,49 @@ public:
 	void clear()
 	{
 		Node *cur;
-		while (head != NULL)
+		while (head!=NULL)
         {
-			cur = head;
-			head = head->next;
+			cur=head;
+			head=head->next;
 			delete cur;
 		}
-        tail = NULL;
+        tail=NULL;
         length=0;
 	}
 
 	void insertLast(type element)
 	{
 
-		Node *newNode = new Node;
-		newNode->item = element;
+		Node *newNode=new Node;
+		newNode->item=element;
 
-		if (length == 0) {
-			tail = head = newNode;
-			newNode->next = NULL;
+		if (length==0) {
+			tail=head=newNode;
+			newNode->next=NULL;
 		}
 		else {
-			tail->next = newNode;
-			newNode->next = NULL;
-			tail = newNode;
+			tail->next=newNode;
+			newNode->next=NULL;
+			tail=newNode;
 		}
 		length++;
 	}
 
 	bool removeFirst()
 	{
-		if (length == 0)
+		if (length==0)
 			return false;
-		else if (length == 1)
+		else if (length==1)
         {
 			delete head;
-			head = tail = NULL;
+			head=tail=NULL;
 			length--;
             return true;
 		}
 		else
             {
-			Node * cur = head;
-			head = head->next;
+			Node *cur=head;
+			head=head->next;
 			delete cur;
 			length--;
             return true;
@@ -197,11 +198,12 @@ public:
 	template<typename secondType>
 	type search(secondType element) const
 	{
-		Node *cur = head;
-		while (cur != NULL) {
-			if (cur->item == element)
+		Node *cur=head;
+		while(cur!=NULL)
+		{
+			if(cur->item==element)
 			    return cur->item;
-			cur = cur->next;
+			cur=cur->next;
 		}
 		return cur->item;
 	}

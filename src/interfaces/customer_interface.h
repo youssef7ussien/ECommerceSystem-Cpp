@@ -6,7 +6,7 @@
 #include"../data/linked_list.h"
 #include"../data/queue.h"
 
-/*
+/**
  *     firstPageOfSeller() : This function returns seven possibilities
  *         1- return -1 -> For back
  *         2- return -2 -> For search
@@ -18,7 +18,7 @@
  */
 int firstPageOfCustomer(const Customer&,const Products &products);
 
-/*
+/**
  *     showProducts() : This function returns two possibilities
  *     1- return -1 -> For back
  *     2- return value between 0 and (number of products)
@@ -26,7 +26,7 @@ int firstPageOfCustomer(const Customer&,const Products &products);
  */
 int showProducts(std::string,const List<Product> &,std::string categoryName="");
 
-/*
+/**
  *     showCategories() : This function returns two possibilities
  *     1- return -1 -> For back
  *     2- return value between 0 and (number of categories)
@@ -34,7 +34,7 @@ int showProducts(std::string,const List<Product> &,std::string categoryName="");
  */
 int showCategories(std::string,const List<Category> &);
 
-void searchPage(const List<Product> &);
+int searchPage(std::string,const List<Product> &,int &);
 
 int showCart(Customer &,Queue<Product> *);
 

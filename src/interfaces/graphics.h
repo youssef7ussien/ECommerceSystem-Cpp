@@ -67,6 +67,7 @@ void setCursor(int x, int y);
 void editCursor(bool ,float sizeCursor=1);
 void clearScreen();
 void clearLine(int);
+void clearMultiLines(int, int, int, int);
 void wait(int);
 void drawRectangle(int, int, int, int,int style=1);
 void drawCircle(int, int, int);

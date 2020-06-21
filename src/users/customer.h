@@ -74,7 +74,7 @@ public:
         return country;
     }
 
-    string setCountry(string country)
+    void setCountry(string country)
     {
         this->country=country;
     }
@@ -110,7 +110,6 @@ class Customer {
 public:
     Customer()
     {
-//        PD=NULL;
         name="";
     }
 
@@ -144,7 +143,7 @@ public:
         cart.enqueue(product);
     }
 
-    void showPurchaseData()
+    void printPurchaseData()
     {
 
     }

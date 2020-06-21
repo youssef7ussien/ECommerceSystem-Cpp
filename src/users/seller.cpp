@@ -1,8 +1,17 @@
 #include "seller.h"
 
 int Seller::count=0;
+
 Seller::Seller() : Account()
 {}
+
+//Seller::Seller(const Account &account) : Account(account.getFirstName(),account.getLastName()
+//                                            ,account.getUserName(),account.getEmail(),
+//                                            account.getEmail()
+//                                         )
+//{
+//    id=count++;
+//}
 
 Seller::Seller(string firstName, string lastName, string userName, string email, string password)
         : Account(firstName,lastName,userName,email,password)
@@ -27,10 +36,9 @@ int Seller::numberProducts() const
     return productsId.getLength();
 }
 
-bool Seller::addProduct(int productId)
+void Seller::addProduct(int productId)
 {
     productsId.insertLast(productId);
-    return true;
 }
 
 bool Seller::deleteProduct(int id)
@@ -55,6 +63,17 @@ void Seller::getProducts(Product *product[],List<Product> products)
     for(int i=0 ; i<productsId.getLength() ; i++)
         product[i]=products.getItem(productsId.getCopyItem(i));
 }
+
+// Seller& Seller::operator =(const Seller &seller)
+// {
+//     id=seller.getId();
+//     firstName=seller.getFirstName();
+//     lastName=seller.getLastName();
+//     userName=seller.getUserName();
+//     email=seller.getEmail();
+//     password=seller.getPassword();
+//     return *this;
+// }
 
 bool Seller::operator ==(string username) const
 {

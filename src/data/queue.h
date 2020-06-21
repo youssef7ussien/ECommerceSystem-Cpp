@@ -1,25 +1,22 @@
 #ifndef QUEUE_H_INCLUDED
 #define QUEUE_H_INCLUDED
 
-
 template<class type>
 class Queue
 {
     struct Node
     {
-        type element;
+        type item;
         Node *next;
     };
     int length;
     Node *front;
     Node *rear;
-//    double total;
 
 public:
     Queue()
     {
         length=0;
-//        total=0;
         front=rear=nullptr;
     }
 
@@ -35,47 +32,45 @@ public:
 
     type getFront() const
 	{
-        return front->element;
+        return front->item;
 	}
 
 	type getRear() const
 	{
-		if(!isEmpty())
-            return rear->item;
+        return rear->item;
 	}
 
-    void enqueue(type item)
+    void enqueue(const type &item)
     {
         Node *ptr=new Node;
-        ptr->element=item;
+        ptr->item=item;
         ptr->next=nullptr;
         if(isEmpty())
-        {
             front=rear=ptr;
-        }
         else
         {
             rear->next=ptr;
             rear=ptr;
         }
         length++;
-        //total+=prod.getPrice();
     }
 
     type dequeue()
     {
+        Node *tempNode=nullptr;
         if(!isEmpty())
         {
-            Node *tempNode=front;
+            tempNode=front;
             front=front->next;
             tempNode->next=NULL;
-            type element=tempNode->element;
+            type item=tempNode->item;
             delete tempNode;
             if(length==1)
                 rear=NULL;
             length--;
-            return element;
+            return item;
         }
+        return tempNode->item;
     }
 
     void clear()
@@ -90,6 +85,30 @@ public:
         rear=nullptr;
         length=0;
     }
+    Queue<type> copy() const
+    {
+        Node*cur=front;
+        Queue<type> q;
+        while (cur!=NULL)
+        {
+            q.enqueue(cur->item);
+            cur=cur->next;
+        }
+        return q;
+    }
+
+//    void operator=(const Queue &queue)
+//    {
+//        Node* tmp = queue.front;
+//        while(tmp->next != NULL) {
+//            front->item = tmp->item;
+//            front->next = new Node;
+//            front = front->next;
+//            tmp = tmp->next;
+//        }
+//    }
+
+
 };
 
 #endif // QUEUE_H_INCLUDED

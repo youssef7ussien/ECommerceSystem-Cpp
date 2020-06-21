@@ -22,14 +22,14 @@ Product::Product(string name, string categoryName , double price, string descrip
 
 bool Product::operator ==(Product product) const
 {
-    return (product.name == name && product.categoryName == categoryName &&
-            product.price == price && product.description == description && product.id == id);
+    return (product.name==name && product.categoryName==categoryName &&
+            product.price==price && product.description==description && product.id==id);
 }
 
 bool Product::operator !=(Product product) const
 {
-    return (product.name != name && product.categoryName != categoryName &&
-            product.price != price && product.description != description && product.id != id);
+    return (product.name!=name && product.categoryName!=categoryName &&
+            product.price!=price && product.description!=description && product.id!=id);
 }
 
 bool Product::operator ==(int id) const
@@ -42,14 +42,9 @@ bool Product::operator !=(int id) const
     return (this->id != id);
 }
 
-bool Product::operator ==(string name) const
+bool Product::operator ==(string subName) const
 {
-    return (this->name == name);
-}
-
-bool Product::operator !=(string name) const
-{
-    return (this->name != name);
+    return name.find(subName)==std::string::npos ? false : true;
 }
 
 int Product::getId() const
@@ -102,3 +97,8 @@ void Product::setDescription(string description)
 {
     this->description = description;
 }
+
+//char toLowerCase(char c)
+//{
+//    return (c>=97 ? c : c+32);
+//}

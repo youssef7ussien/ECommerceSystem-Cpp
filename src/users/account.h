@@ -11,6 +11,7 @@ public:
     Account();
     Account(const string &firstName, const string &lastName, const string &userName, const string &email,
             const string &password);
+//    Account(const Account &);
     string getName() const;
     string getFirstName() const;
     void setFirstName(string);
@@ -22,11 +23,11 @@ public:
     void setEmail(string);
     string getPassword() const;
     void setPassword(string);
-    bool validationEmail();
-    bool validationName();
-    bool validationUsername();
-    bool validationPassword();
-    bool confirmPassword(string);
+    bool validationEmail() const;
+    bool validationName() const;
+    bool validationUsername() const;
+    bool validationPassword() const;
+    bool confirmPassword(string) const;
 
 };
 

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "interfaces/interfaces.h"
+#include "graphics.h"
 
 using namespace std;
 
@@ -17,7 +18,7 @@ int main()
     while(1)
     {
         int index=interfaceLoginAs();
-        if(index==0 || index==1 || index==3)
+        if(index==0 || index==1)
         {
             if(CreateSellers)
             {
@@ -26,38 +27,46 @@ int main()
             }
             if(index==0)
             {
-                Admin admin("Admin","Admin","admin","admin@commerce.com","admin",&sellers,&products);
-                if(interfaceLogin())
+                Admin admin("Admin","Admin","admin","admin@commerce.com","admin",sellers,&products);
+                if(interfaceLoginAdmin())
                     interfaceAdmin(admin);
             }
             else if(index==1)
             {
-                int id;
-                if(interfaceLoginSeller(sellers,id))
-                    interfaceSeller(sellers.getSeller(id),products);
-            }
-            else if (index==3)
-            {
-                Account account;
-                if(interfaceRegister(account))
+                int result=chooseMethod();
+                if(result==0)
                 {
-                    sellers.addRequest(Seller(account.getFirstName(),account.getLastName()
-                                            ,account.getUserName(),account.getEmail(),
-                                            account.getEmail()));
+                    int id;
+                    if(interfaceLoginSeller(sellers,id))
+                        interfaceSeller(*sellers.getSeller(id),products);
                 }
+                else if(result==1)
+                {
+                    Account account;
+                    if(interfaceRegister(account))
+                    {
+                        sellers.addRequest(Seller(account.getFirstName(),account.getLastName()
+                                                ,account.getUserName(),account.getEmail(),
+                                                account.getPassword()));
+                    }
+                }
+                else
+                    continue;
             }
         }
-        else if (index==2)
+        else if(index==2)
         {
             interfaceCustomer(products);
         }
-        else if (index==4)
+        else if(index==3)
+        {
+            system("pause");
+        }
+        else if(index==4)
         {
             if(interfaceExitGame(44,8))
                 return 0;
         }
     }
-    setCursor(0,32);
-    //system("pause");
     return 0;
 }

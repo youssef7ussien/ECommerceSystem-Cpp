@@ -1,5 +1,8 @@
-#include "Graphics.h"
 #include <iostream>
+#include <Windows.h>
+#include <math.h>
+#include "Graphics.h"
+
 using namespace std;
 
 void initConsole()

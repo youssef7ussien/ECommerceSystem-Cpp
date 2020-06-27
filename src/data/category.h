@@ -37,7 +37,7 @@ public:
 
 	int getProductId(int index) const
 	{
-		return productsId.getCopyItem(index);
+		return productsId.getCopyItemAt(index);
 	}
 
 	List<int> getProductsId() const

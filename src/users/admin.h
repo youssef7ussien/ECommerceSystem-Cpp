@@ -12,11 +12,11 @@ private:
 
 public:
 
-	Admin(std::string firstName,std::string lastName,std::string username,std::string email,
-		std::string password,Sellers *sellers, Products *products)
+	Admin(string firstName,string lastName,string username,string email,
+		  string password,Sellers &sellers, Products *products)
 		: Account( firstName, lastName, username, email, password)
 	{
-		this->sellers=sellers;
+		this->sellers=&sellers;
 		this->products=*products;
 	}
 
@@ -47,12 +47,12 @@ public:
 
 	Product getProductAt(int index) const
 	{
-		return products.getProductConst(index);
+		return products.getCopyProductAt(index);
 	}
 
 	Product getProduct(int id) const
 	{
-		return products.getProductConstId(id);
+		return products.getCopyProduct(id);
 	}
 
 	Seller getSellerConst(int index) const
@@ -75,10 +75,10 @@ public:
 		sellers->removeReqeust();
 	}
 
-	void removeSeller(std::string name)
-	{
-		sellers->deleteSeller(name);
-	}
+//	void removeSeller(string name)
+//	{
+//		sellers->deleteSeller(name);
+//	}
 
 	void removeSeller(int index)
 	{

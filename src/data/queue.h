@@ -1,6 +1,8 @@
 #ifndef QUEUE_H_INCLUDED
 #define QUEUE_H_INCLUDED
 
+#include<iostream>
+
 template<class type>
 class Queue
 {
@@ -85,6 +87,7 @@ public:
         rear=nullptr;
         length=0;
     }
+
     Queue<type> copy() const
     {
         Node*cur=front;
@@ -96,18 +99,6 @@ public:
         }
         return q;
     }
-
-//    void operator=(const Queue &queue)
-//    {
-//        Node* tmp = queue.front;
-//        while(tmp->next != NULL) {
-//            front->item = tmp->item;
-//            front->next = new Node;
-//            front = front->next;
-//            tmp = tmp->next;
-//        }
-//    }
-
 
 };
 

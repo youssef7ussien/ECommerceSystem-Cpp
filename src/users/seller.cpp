@@ -36,17 +36,17 @@ int Seller::numberProducts() const
     return productsId.getLength();
 }
 
-void Seller::addProduct(int productId)
+void Seller::addProductId(int productId)
 {
     productsId.insertLast(productId);
 }
 
-bool Seller::deleteProduct(int id)
+bool Seller::deleteProductId(int id)
 {
     return productsId.remove<int>(id);
 }
 
-int Seller::deleteProductAt(int index)
+int Seller::deleteProductIdAt(int index)
 {
     int id=*productsId[index];
     productsId.removeAt(index);
@@ -55,34 +55,23 @@ int Seller::deleteProductAt(int index)
 
 int Seller::getProductId(int index) const
 {
-    return productsId.getCopyItem(index);
+    return productsId.getCopyItemAt(index);
 }
 
 void Seller::getProducts(Product *product[],List<Product> products)
 {
     for(int i=0 ; i<productsId.getLength() ; i++)
-        product[i]=products.getItem(productsId.getCopyItem(i));
+        product[i]=products.getItem(productsId.getCopyItemAt(i));
 }
 
-// Seller& Seller::operator =(const Seller &seller)
-// {
-//     id=seller.getId();
-//     firstName=seller.getFirstName();
-//     lastName=seller.getLastName();
-//     userName=seller.getUserName();
-//     email=seller.getEmail();
-//     password=seller.getPassword();
-//     return *this;
-// }
-
-bool Seller::operator ==(string username) const
+bool Seller::operator ==(string email) const
 {
-    return (this->userName==username);
+    return (this->email==email);
 }
 
-bool Seller::operator !=(string username) const
+bool Seller::operator !=(string email) const
 {
-    return (this->userName!=username);
+    return (this->email!=email);
 }
 
 bool Seller::operator ==(int id) const

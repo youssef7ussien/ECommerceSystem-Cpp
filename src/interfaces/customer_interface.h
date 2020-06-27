@@ -3,8 +3,6 @@
 
 #include"../users/customer.h"
 #include"../data/products.h"
-#include"../data/linked_list.h"
-#include"../data/queue.h"
 
 /**
  *     firstPageOfSeller() : This function returns seven possibilities
@@ -36,12 +34,17 @@ int showCategories(std::string,const List<Category> &);
 
 int searchPage(std::string,const List<Product> &,int &);
 
-int showCart(Customer &,Queue<Product> *);
+int showCart(std::string,Queue<Product>,PurchaseData &);
 
+void noProductDialog();
 // return name
 string nameDialog();
 
 void buyDialog(const Customer &,std::string);
+
+void cartFullDialog(std::string);
+
+void outOfStockDialog(std::string);
 
 
 

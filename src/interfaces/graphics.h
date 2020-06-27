@@ -1,9 +1,7 @@
 #ifndef GRAPHICS_H_INCLUDED
 #define GRAPHICS_H_INCLUDED
 
-#include <Windows.h>
 #include <conio.h>
-#include <math.h>
 
 #define KEY_UP          72
 #define KEY_DOWN        80

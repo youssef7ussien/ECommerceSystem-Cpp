@@ -1,12 +1,8 @@
 #ifndef INTERFACES_H_INCLUDED
 #define INTERFACES_H_INCLUDED
 
-#include "graphics.h"
 #include"../users/customer.h"
-#include"../users/sellers.h"
 #include"../users/admin.h"
-#include "../data/products.h"
-#include "../users/account.h"
 
 enum User {ADMIN,SELLER,CUSTOMER};
 
@@ -20,15 +16,16 @@ enum User {ADMIN,SELLER,CUSTOMER};
  */
 int interfaceLoginAs();
 
+int chooseMethod();
 
-bool interfaceLogin();
+bool interfaceLoginAdmin();
 
 /**
  * interfaceLoginSeller() : This function checks the seller's account,
  *   and returns the identification number via the reference &,
  *   and it is correct if it is present and wrong if not.
  */
-bool interfaceLoginSeller(const Sellers ,int &);
+bool interfaceLoginSeller(const Sellers &,int &);
 
 /**
  * interfaceRegister() :
@@ -38,23 +35,27 @@ bool interfaceLoginSeller(const Sellers ,int &);
 bool interfaceRegister(Account &);
 
 /**
- * interfaceRegister() :
+ * interfaceAdmin() :
  *
  *
  */
 void interfaceAdmin(Admin &);
 
-// Seller
-void interfaceSeller(Seller *,Products &);
+/**
+ * interfaceSeller() :
+ *
+ *
+ */
+void interfaceSeller(Seller &,Products &);
 
-// Customer
-void interfaceCustomer(const Products &);
+/**
+ * interfaceCustomer() :
+ *
+ *
+ */
+void interfaceCustomer(Products &);
 
 
 bool interfaceExitGame(int x,int y);
-
-
-void notCompleted();  // For Test
-
 
 #endif // INTERFACES_H_INCLUDED

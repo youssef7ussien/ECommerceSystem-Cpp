@@ -164,8 +164,13 @@ public:
 		return false;
 	}
 
+	type& getHead() const
+	{
+		return head->item;
+	}
+
 	template<typename secondType>
-	type *getItem(secondType element)
+	type* getItem(secondType element)
 	{
 		Node *cur = head;
 		while (cur != NULL) {
@@ -176,7 +181,25 @@ public:
         return &cur->item;
 	}
 
-	type getItemId(int element) const
+	type* operator [](string name)
+	{
+		return getItem<string>(name);
+	}
+
+	type* getItemAt(int index)
+	{
+        Node *cur = head;
+        while(index--)
+            cur = cur->next;
+        return &cur->item;
+	}
+
+	type* operator [](int index)
+	{
+        return getItemAt(index);
+	}
+
+	type getCopyItem(int element) const
 	{
 		Node *cur = head;
 		while (cur != NULL) {
@@ -187,7 +210,7 @@ public:
         return cur->item;
 	}
 
-	type getCopyItem(int index) const
+	type getCopyItemAt(int index) const
 	{
         Node *cur = head;
         while(index--)
@@ -220,21 +243,18 @@ public:
 		return false;
 	}
 
-	type *operator [](int index)
-	{
-        Node *cur = head;
-        while(index--)
-            cur = cur->next;
-        return &cur->item;
-	}
-
-	type *operator [](string name)
+	template<typename secondType>
+	bool contain(secondType element,type &item) const
 	{
 		Node *cur = head;
 		while (cur != NULL) {
-			if (cur->item == name)
-				return &cur->item;
+			if (cur->item == element)
+			    {
+			    	item=cur->item;
+			    	return true;
+				}
 			cur = cur->next;
 		}
+		return false;
 	}
 };

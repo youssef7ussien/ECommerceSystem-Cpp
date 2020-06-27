@@ -7,30 +7,37 @@
 using namespace std;
 
 class Product {
-	int id;
+	int id,quantity;
 	string name, categoryName, description;
 	double price;
     static int count;
 public:
 
     Product();
-    Product(string name, string categoryName , double price, string description);
-	bool operator ==(Product product) const;
-	bool operator !=(Product product) const;
-	bool operator ==(int id) const;
-	bool operator !=(int id) const;
-	bool operator ==(string name) const;
-	bool operator !=(string name) const;
+    Product(string, string, double, string);
+    Product(string, string, double, int, string);
+    Product(int, string, string, double, int, string);
+    bool outOfStock() const;
+    bool decreaseStock();
+    void increaseStock();
 	int generateId();
 	int getId() const;
+	void setName(string);
 	string getName() const;
-	string getCategoryName() const;
+	void setPrice(double);
 	double getPrice() const;
+	void setQuantity(int);
+	int getQuantity() const;
+	void setCategoryName(string);
+	string getCategoryName() const;
+	void setDescription(string);
 	string getDescription() const;
-	void setName(string newName);
-	void setCategoryName(string categoryName);
-	void setPrice(double price2);
-	void setDescription(string description);
+	bool operator ==(Product) const;
+	bool operator !=(Product) const;
+	bool operator ==(int) const;
+	bool operator !=(int) const;
+	bool operator ==(string) const;
+	bool operator !=(string) const;
 };
 
 #endif // PRODUCT_H_INCLUDED

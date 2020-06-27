@@ -23,11 +23,12 @@ public:
     void setEmail(string);
     string getPassword() const;
     void setPassword(string);
-    bool validationEmail() const;
-    bool validationName() const;
-    bool validationUsername() const;
-    bool validationPassword() const;
-    bool confirmPassword(string) const;
+    Account *getAccount();
+//    bool validationEmail() const;
+//    bool validationName() const;
+//    bool validationUsername() const;
+//    bool validationPassword() const;
+//    bool confirmPassword(string) const;
 
 };
 

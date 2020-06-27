@@ -2,8 +2,6 @@
 #define ADMIN_INTERFACE_H_INCLUDED
 
 #include"../users/admin.h"
-#include"../users/seller.h"
-#include"../data/products.h"
 
 /**
  *     firstPageOfAdmin() : This function returns four possibilities

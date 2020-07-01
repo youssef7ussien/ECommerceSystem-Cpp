@@ -14,7 +14,7 @@ public:
     Category()
     {}
 
-    Category(string name,int id)
+    Category(const string &name,int id)
     {
         this->name=name;
         addProductId(id);
@@ -30,7 +30,7 @@ public:
 		return name;
 	}
 
-	void setName(string name)
+	void setName(const string &name)
 	{
 		this->name=name;
 	}
@@ -55,22 +55,22 @@ public:
 		return productsId.remove<int>(id);
 	}
 
-	bool operator ==(Category category)
+	bool operator ==(const Category& category) const
 	{
 		return (category.name==name);
 	}
 
-	bool operator !=(Category category)
+	bool operator !=(const Category& category) const
 	{
-		return (category.name != name);
+		return (category.name!=name);
 	}
 
-	bool operator ==(string name)
+	bool operator ==(const string &name) const
 	{
 		return (this->name == name);
 	}
 
-	bool operator !=(string name)
+	bool operator !=(const string &name) const
 	{
 		return (this->name != name);
 	}

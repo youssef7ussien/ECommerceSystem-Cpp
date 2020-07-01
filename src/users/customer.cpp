@@ -7,7 +7,7 @@ using namespace std;
 
 PurchaseData::PurchaseData()
 {
-    name=address=phoneNumber=email=paymentMethod=country="";
+    name=address=phoneNumber=email=country="";
 }
 
 string PurchaseData::getName() const
@@ -48,16 +48,6 @@ string PurchaseData::getPhoneNumber() const
 void PurchaseData::setPhoneNumber(string phoneNumber)
 {
     this->phoneNumber=phoneNumber;
-}
-
-string PurchaseData::getPaymentMethod() const
-{
-    return paymentMethod;
-}
-
-void PurchaseData::setPaymentMethod(string paymentMethod)
-{
-    this->paymentMethod=paymentMethod;
 }
 
 string PurchaseData::getCountry() const
@@ -136,7 +126,7 @@ void Customer::createPurchaseData(PurchaseData PD)
     this->PD=PD;
 }
 
-void Customer::addToCart(Product product)
+void Customer::addToCart(const Product& product)
 {
     cart.enqueue(product);
 }
@@ -146,16 +136,16 @@ Product Customer::removeFromCart()
     return cart.dequeue();
 }
 
-string createFileName(const string fileName)
+string createFileName(const string& fileName)
 {
-    string newName=fileName+".txt";
+    string newName=fileName+"-invoice.txt";
     ifstream file(newName);
     for(int i=1 ; i>0 ; i++)
     {
         if(file)
         {
             file.close();
-            newName=fileName+"("+to_string(i)+").txt";
+            newName=fileName+" - invoice ("+to_string(i)+").txt";
             file.open(newName);
         }
         else
@@ -190,11 +180,14 @@ void Customer::printPurchaseData(Queue<Product> products)
     invoiceFile<<endl<<"Customer Information : "<<endl;
     invoiceFile<<"\t"; line(invoiceFile,70);
     invoiceFile<<"\t "<<setw(20)<<left<<"* Name"<<setw(40)<<left<<PD.getName()<<endl;
-    invoiceFile<<"\t"; line(invoiceFile,70);    invoiceFile<<"\t "<<setw(20)<<left<<"* Phone Number"<<setw(40)<<left<<PD.getPhoneNumber()<<endl;
+    invoiceFile<<"\t"; line(invoiceFile,70);
+    invoiceFile<<"\t "<<setw(20)<<left<<"* Phone Number"<<setw(40)<<left<<PD.getPhoneNumber()<<endl;
     invoiceFile<<"\t"; line(invoiceFile,70);
     invoiceFile<<"\t "<<setw(20)<<left<<"* Email"<<setw(40)<<left<<PD.getEmail()<<endl;
-    invoiceFile<<"\t"; line(invoiceFile,70);    invoiceFile<<"\t "<<setw(20)<<left<<"* Country"<<setw(40)<<left<<PD.getCountry()<<endl;
-    invoiceFile<<"\t"; line(invoiceFile,70);    invoiceFile<<"\t "<<setw(20)<<left<<"* Address"<<setw(40)<<left<<PD.getAddress()<<endl;
+    invoiceFile<<"\t"; line(invoiceFile,70);
+    invoiceFile<<"\t "<<setw(20)<<left<<"* Country"<<setw(40)<<left<<PD.getCountry()<<endl;
+    invoiceFile<<"\t"; line(invoiceFile,70);
+    invoiceFile<<"\t "<<setw(20)<<left<<"* Address"<<setw(40)<<left<<PD.getAddress()<<endl;
     invoiceFile<<"\t"; line(invoiceFile,70);
 
     line(invoiceFile,90);

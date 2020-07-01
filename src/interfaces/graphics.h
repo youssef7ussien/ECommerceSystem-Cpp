@@ -30,15 +30,6 @@
 #define KEY_F8          66
 #define KEY_F9          67
 
-enum FillStyle {
-    SOLID_FILL,
-    X_FILL,
-    O_FILL,
-    LIGHT_FILL,
-    MEDIUM_FILL,
-    DARK_FILL
-};
-
 enum Colors {
     BLACK=0,
     DARK_BLUE,
@@ -68,8 +59,6 @@ void clearLine(int);
 void clearMultiLines(int, int, int, int);
 void wait(int);
 void drawRectangle(int, int, int, int,int style=1);
-void drawCircle(int, int, int);
 void drawLine(int, int, int, int,Colors colorLine=LIGHT_GRAY);
-void setFillStyle(FillStyle);
 
 #endif // GRAPHICS_H_INCLUDED

@@ -5,6 +5,12 @@ int Seller::count=0;
 Seller::Seller() : Account()
 {}
 
+Seller::Seller(int id) : Account()
+{
+    this->id=id;
+    count++;
+}
+
 //Seller::Seller(const Account &account) : Account(account.getFirstName(),account.getLastName()
 //                                            ,account.getUserName(),account.getEmail(),
 //                                            account.getEmail()
@@ -13,14 +19,15 @@ Seller::Seller() : Account()
 //    id=count++;
 //}
 
-Seller::Seller(string firstName, string lastName, string userName, string email, string password)
-        : Account(firstName,lastName,userName,email,password)
+Seller::Seller(const string& firstName, const string& lastName, const string& userName,
+        const string& email, const string& password): Account(firstName,lastName,userName,email,password)
 {
     id=count++;
 }
 
-Seller::Seller(string firstName, string lastName, string userName, string email, string password,
-        List<int> productsId) : Account(firstName,lastName,userName,email,password)
+Seller::Seller(const string& firstName, const string& lastName, const string& userName,
+        const string& email, const string& password,List<int> productsId)
+        : Account(firstName,lastName,userName,email,password)
 {
     id=count++;
     this->productsId=productsId;
@@ -48,9 +55,9 @@ bool Seller::deleteProductId(int id)
 
 int Seller::deleteProductIdAt(int index)
 {
-    int id=*productsId[index];
-    productsId.removeAt(index);
-    return id;
+    int productId;
+    productsId.removeAt(index,productId);
+    return productId;
 }
 
 int Seller::getProductId(int index) const
@@ -64,12 +71,12 @@ void Seller::getProducts(Product *product[],List<Product> products)
         product[i]=products.getItem(productsId.getCopyItemAt(i));
 }
 
-bool Seller::operator ==(string email) const
+bool Seller::operator ==(const string& email) const
 {
     return (this->email==email);
 }
 
-bool Seller::operator !=(string email) const
+bool Seller::operator !=(const string& email) const
 {
     return (this->email!=email);
 }

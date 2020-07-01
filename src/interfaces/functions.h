@@ -1,19 +1,27 @@
 #ifndef FUNCTIONS_H_INCLUDED
 #define FUNCTIONS_H_INCLUDED
 
-#include<iostream>
 #include "../data/product.h"
-using namespace std;
 
+/**
+ *  inputText() : This function is used for program entries
+ *   and it returns the value entered
+ */
 string inputText();
 
-bool validationRegex(string, string);
+/**
+ *  validationRegex() : This function is used to check entries so that the program works without any problems,
+ *    the verification process is done through the regex.
+ */
+bool validationRegex(const string&, const string&);
 
 void initialBox(int, int, int, int, int height=1);
 
-void statusBar(string ,string text="LOGOUT",bool isAdmin=false);
+void statusBar(const string& ,const string& text="LOGOUT",bool isAdmin=false);
 
 void productBox(int, int, int, const Product &, int);
+
+bool logOutDialog(const string&);
 
 
 #endif // FUNCTIONS_H_INCLUDED

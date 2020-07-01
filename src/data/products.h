@@ -12,7 +12,6 @@ class Products {
 
 public:
     Products();
-    void initializingData();
 	int categoriesLength() const;
 	int productsLength() const;
 	Product& getHead()
@@ -29,11 +28,13 @@ public:
 	Category getCopyCategoryAt(int) const;
 	List<Product> getProductsOfCategory(List<int>) const;
 	List<Category> getCategories() const;
-//	Category* getArrayCategories(int num=categories.getLength()) const
-	void changeCategory(int,string,string);
-	void addProduct(Product);
+	void changeCategory(int,string,const string&);
+	void addProduct(const Product&);
 	bool deleteProduct(int);
 	bool deleteProductAt(int);
 
+    void defaultData();  // For Test
+    bool initializingData();
+    bool saveData();
 };
 

@@ -1,28 +1,23 @@
 #include <iostream>
 #include <Windows.h>
-#include <math.h>
-#include "Graphics.h"
+#include <cmath>
+#include "graphics.h"
 
 using namespace std;
 
 void initConsole()
 {
-//    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-//    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-    //HWND hWnd = GetConsoleWindow();
+    editCursor(false);
+    color(LIGHT_GRAY);
     setConsoleSize(130,35);
     SetConsoleTitle("E-Commerce Management System");
-//    MoveWindow(hWnd,50,50,50,50,TRUE);
-//    ShowWindow(GetConsoleWindow(),SW_SHOWMAXIMIZED);
-    color(LIGHT_GRAY);
-	//clearScreen();
 }
 
 void setConsoleSize(short width, short height)
 {
     _COORD coord={width,height};
 
-    _SMALL_RECT Rect;
+    _SMALL_RECT Rect{};
     Rect.Top=0;
     Rect.Left=0;
     Rect.Bottom=height-1;
@@ -79,25 +74,24 @@ void drawRectangle(int x, int y, int width, int height,int style)
 {
     height+=1;
     width+=2;
-    char topLeft='0',topRight='0',bottomLeft='0',bottomRight='0',verticalLine='0',horizontalLine='0';
-    switch(style)
+    char topLeft,topRight,bottomLeft,bottomRight,verticalLine,horizontalLine;
+    if(style==1)
     {
-        case 1:
-            topLeft=char(218);
-            topRight=char(191);
-            bottomLeft=char(192);
-            bottomRight=char(217);
-            verticalLine=char(196);
-            horizontalLine=char(179);
-            break;
-        case 2:
-            topLeft=char(201);
-            topRight=char(187);
-            bottomLeft=char(200);
-            bottomRight=char(188);
-            verticalLine=char(205);
-            horizontalLine=char(186);
-            break;
+        topLeft=char(218);
+        topRight=char(191);
+        bottomLeft=char(192);
+        bottomRight=char(217);
+        verticalLine=char(196);
+        horizontalLine=char(179);
+    }
+    else
+    {
+        topLeft=char(201);
+        topRight=char(187);
+        bottomLeft=char(200);
+        bottomRight=char(188);
+        verticalLine=char(205);
+        horizontalLine=char(186);
     }
 
     setCursor(x,y);
@@ -119,27 +113,6 @@ void drawRectangle(int x, int y, int width, int height,int style)
 		cout<<horizontalLine;
 		setCursor(x+width-1,i);
 		cout<<horizontalLine;
-	}
-}
-
-void drawCircle(int xC, int yC, int radius)
-{
-	double theta, increment, xF, pi=3.14159;
-	int x, xN, yN;
-
-	increment=0.8/static_cast<double>(radius);
-	for (theta=0; theta<=pi/2; theta += increment)
-	{
-		xF=radius * cos(theta);
-		xN=static_cast<int>(xF*2/1);
-
-		yN=static_cast<int>(radius*sin(theta)+0.5);
-		x=xC-xN;
-		while(x<=xC+xN)
-		{
-			setCursor(x, yC-yN); cout<<char(191)<<endl;
-			setCursor(x++, yC+yN); cout<<char(191)<<endl;
-		}
 	}
 }
 

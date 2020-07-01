@@ -80,41 +80,8 @@ void Account::setPassword(string password)
     this->password=password;
 }
 
- Account *Account::getAccount()
- {
-     return this;
- }
-
-//bool Account::validationName() const
-//{
-//    regex pattern("^[a-zA-z0-9 \\-]{3,15}$");
-//
-//    return regex_match(getFirstName(), pattern) && regex_match(getLastName(), pattern);
-//}
-//
-//bool Account::validationEmail() const
-//{
-//    regex pattern("^[\\w\\._]{3,21}@[\\w\\._]{2,11}\\.\\w{2,4}$");
-//
-//    return regex_match(getEmail(), pattern);
-//}
-//
-//bool Account::validationUsername() const
-//{
-//    regex pattern("^([A-Z._a-z0-9]){3,30}$");
-//
-//    return regex_match(getUserName(), pattern);
-//}
-//
-//bool Account::validationPassword() const
-//{
-//    regex pattern("^([A-Z._a-z0-9]){8,30}$");
-//
-//    return regex_match(getPassword(), pattern);
-//}
-//
-//bool Account::confirmPassword(string password) const
-//{
-//    return getPassword()==password;
-//}
+Account *Account::getAccount()
+{
+ return this;
+}
 

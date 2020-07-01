@@ -1,57 +1,51 @@
-#include <iostream>
 #include "interfaces/interfaces.h"
-#include "graphics.h"
-
-using namespace std;
-
+#include "interfaces/graphics.h"
 
 int main()
 {
     initConsole();
-    editCursor(false);
 
     Products products;
     products.initializingData();
-    bool CreateSellers=true;
+
+    bool CreateSellers=false;
     Sellers sellers;
 
-    while(1)
+    while(true)
     {
         int index=interfaceLoginAs();
         if(index==0 || index==1)
         {
-            if(CreateSellers)
+            if(!CreateSellers)
             {
                 sellers.initializingData();
-                CreateSellers=false;
+                CreateSellers=true;
             }
             if(index==0)
             {
-                Admin admin("Admin","Admin","admin","admin@commerce.com","admin",sellers,&products);
+                Admin admin("Admin","Admin","admin","admin@commerce.com","admin",sellers,products);
                 if(interfaceLoginAdmin())
                     interfaceAdmin(admin);
             }
-            else if(index==1)
+            else
             {
-                int result=chooseMethod();
-                if(result==0)
+                int result=chooseMethodLogin();
+                if (result==0)
                 {
                     int id;
-                    if(interfaceLoginSeller(sellers,id))
-                        interfaceSeller(*sellers.getSeller(id),products);
+                    if (interfaceLoginSeller(sellers, id))
+                        interfaceSeller(*sellers.getSeller(id), products);
                 }
-                else if(result==1)
+                else if (result==1)
                 {
                     Account account;
-                    if(interfaceRegister(account))
+                    if (interfaceRegister(account))
                     {
-                        sellers.addRequest(Seller(account.getFirstName(),account.getLastName()
-                                                ,account.getUserName(),account.getEmail(),
-                                                account.getPassword()));
+                        sellers.addRequest(Seller(account.getFirstName(), account.getLastName(),
+                                                  account.getUserName(),account.getEmail(),
+                                                  account.getPassword()));
                     }
                 }
-                else
-                    continue;
             }
         }
         else if(index==2)
@@ -59,13 +53,16 @@ int main()
             interfaceCustomer(products);
         }
         else if(index==3)
-        {
-            system("pause");
-        }
+            aboutDialog();
         else if(index==4)
         {
             if(interfaceExitGame(44,8))
+            {
+                products.saveData();
+                if(CreateSellers)
+                    sellers.saveData();
                 return 0;
+            }
         }
     }
     return 0;

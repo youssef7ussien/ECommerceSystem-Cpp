@@ -8,21 +8,21 @@ class Admin : public Account
 private:
 
 	Sellers *sellers;
-	Products products;
+	Products *products;
 
 public:
 
 	Admin(string firstName,string lastName,string username,string email,
-		  string password,Sellers &sellers, Products *products)
+		  string password,Sellers &sellers, Products &products)
 		: Account( firstName, lastName, username, email, password)
 	{
 		this->sellers=&sellers;
-		this->products=*products;
+		this->products=&products;
 	}
 
 	int numberProducts() const
 	{
-		return products.productsLength();
+		return products->productsLength();
 	}
 
 	int numberSellers() const
@@ -37,7 +37,7 @@ public:
 
 	Products getProducts() const
 	{
-		return products;
+		return *products;
 	}
 
 	Queue<Seller> getRequests() const
@@ -47,17 +47,17 @@ public:
 
 	Product getProductAt(int index) const
 	{
-		return products.getCopyProductAt(index);
+		return products->getCopyProductAt(index);
 	}
 
 	Product getProduct(int id) const
 	{
-		return products.getCopyProduct(id);
+		return products->getCopyProduct(id);
 	}
 
-	Seller getSellerConst(int index) const
+	Seller getCopySellerAt(int index) const
 	{
-		return sellers->getSellerConst(index);
+		return sellers->getCopySellerAt(index);
 	}
 
 	Seller* getSellerAt(int index)
@@ -72,26 +72,19 @@ public:
 
 	void rejectAddSeller()
 	{
-		sellers->removeReqeust();
+        sellers->removeRequest();
 	}
 
-//	void removeSeller(string name)
-//	{
-//		sellers->deleteSeller(name);
-//	}
-
-	void removeSeller(int index)
+	void deleteSeller(int index)
 	{
-		sellers->deleteSellerAt(index);
+		Seller seller;
+		sellers->deleteSellerAt(index,seller);
+		while(seller.numberProducts())
+			products->deleteProduct(seller.deleteProductIdAt(0));
 	}
 
 	void deleteProduct(int id)
 	{
-		products.deleteProduct(id);
-	}
-
-	void deleteProductAt(int index)
-	{
-		products.deleteProductAt(index);
+		products->deleteProduct(id);
 	}
 };

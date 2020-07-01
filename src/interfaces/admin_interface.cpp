@@ -3,7 +3,7 @@
 #include "functions.h"
 #include "graphics.h"
 
-void sellerBox(int x,int y,int number,const Seller seller)
+void sellerBox(int x,int y,int number,const Seller& seller)
 {
     drawRectangle(x,y,44,1);
     setCursor(x+5,y); cout<<char(194);
@@ -22,7 +22,7 @@ void sellerBox(int x,int y,int number,const Seller seller)
     setCursor(x+57,y+2); cout<<char(193);
 }
 
-void requestBox(int x,int y,int number,const Seller request)
+void requestBox(int x,int y,int number,const Seller& request)
 {
     drawRectangle(x,y,3,1);
     setCursor(x+2,y+1); cout<<number;
@@ -83,14 +83,15 @@ void productButtonName(int x,int y,int numberProduct,int index=-1)
     color();
 }
 
-int keyboardControlAdmin(int page,int numButtons,int remainingSellers,int numberSellers,bool isRequests) // use in firstPageOfSeller()
+int keyboardControlAdmin(int page,int numButtons,int remainingSellers,int numberSellers,bool isRequests)
 {
     if(!isRequests)
         { setCursor(13,15); cout<<"There are no requests yet"; }
     char key='0'; int index=0;
     while(key!=KEY_ENTER)
     {
-        isRequests ? sellerButtonName(101,7,(numButtons-4)/2,index) : sellerButtonName(101,7,(numButtons-2)/2,index);
+        isRequests ? sellerButtonName(101,7,(numButtons-4)/2,index)
+                    : sellerButtonName(101,7,(numButtons-2)/2,index);
         if(isRequests)
         {
             if(index==numButtons-4) color(BLACK,RED);
@@ -107,7 +108,7 @@ int keyboardControlAdmin(int page,int numButtons,int remainingSellers,int number
             remainingSellers ? color(BLACK,RED) : color(BLACK,DARK_GRAY);
         setCursor(92,32); cout<<" > "; color();
 
-        while(1)
+        while(true)
         {
             key=_getch();
             if(key==KEY_RIGHT)
@@ -128,63 +129,66 @@ int keyboardControlAdmin(int page,int numButtons,int remainingSellers,int number
             {
                 int x= isRequests ? 4 : 2;
                 if(index==numButtons-1 && remainingSellers)
-                    return -6;
+                    return -7;
                 else if(index==numButtons-2 && remainingSellers+8<numberSellers)
-                    return -5;
+                    return -6;
                 else if(isRequests && index==numButtons-3)
-                    return -4;
+                    return -5;
                 else if(isRequests && index==numButtons-4)
-                    return -3;
+                    return -4;
                 else if(index<numButtons-x)
                     return (index+16*(page-1));
             }
             else if(key==KEY_ESC) // for back
                 return -1;
-            else if(key=='p')
+            else if(key==KEY_F1)
                 return -2;
-            else if(isRequests && key=='c')
+            else if(key=='p')
                 return -3;
-            else if(isRequests && key=='r')
+            else if(isRequests && key=='c')
                 return -4;
-            else if(key=='b' && remainingSellers+8<numberSellers)
+            else if(isRequests && key=='r')
                 return -5;
-            else if(key=='n' && remainingSellers)
+            else if(key=='b' && remainingSellers+8<numberSellers)
                 return -6;
+            else if(key=='n' && remainingSellers)
+                return -7;
         }
     }
     return -1;
 }
 
-int keyboardControlAdmin() // use in firstPageOfSeller()
+int keyboardControlAdmin()
 {
     setCursor(70,15); cout<<"There are no Sellers yet";
-    char key='0'; int index=0;
-    while(key!=KEY_ENTER)
+    int index=1;
+    while(true)
     {
-        if(index==0) color(BLACK,RED);
+        if(index==1) color(BLACK,RED);
         setCursor(15,8); cout<<"   Confirm    "; color();
 
-        if(index==1) color(BLACK,RED);
+        if(index==0) color(BLACK,RED);
         setCursor(32,8); cout<<"    Reject    "; color();
 
-        while(1)
+        while(true)
         {
-            key=_getch();
+            char key=_getch();
             if(key==KEY_RIGHT || key==KEY_LEFT)
                 { index=(index+1)%2; break; }
             else if(key==KEY_ENTER)
-                return index==0 ? -3 : -4;
+                return index-5;
             else if(key==KEY_ESC) // for back
                 return -1;
-            else if(key=='p')
+            else if(key==KEY_F1)
                 return -2;
-            else if(key=='c')
+            else if(key=='p')
                 return -3;
-            else if(key=='r')
+            else if(key=='c')
                 return -4;
+            else if(key=='r')
+                return -5;
         }
     }
-    return -1;
 }
 
 int firstPageOfAdmin(const Admin &admin)
@@ -196,7 +200,7 @@ int firstPageOfAdmin(const Admin &admin)
     else
         { remainingSellers=0; length=numberSellers; }
 
-    while(1)
+    while(true)
     {
         system("cls");
         statusBar(admin.getFirstName(),"LOGOUT",true);
@@ -205,6 +209,8 @@ int firstPageOfAdmin(const Admin &admin)
         drawLine(50,5,50,30,DARK_GRAY);
         setCursor(78,5); color(YELLOW); cout<<"Sellers"; color();
         drawLine(52,6,124,6,DARK_GRAY);
+        setCursor(8,32); color(DARK_GRAY); cout<<"* Press ";
+        color(BROWN); cout<<"F1"; color(DARK_GRAY); cout<<" for keyboard shortcuts"; color();
 
         if(admin.numberRequests()!=0 && admin.numberSellers()==0)
         {
@@ -215,13 +221,15 @@ int firstPageOfAdmin(const Admin &admin)
         {
             setCursor(70,15); cout<<"There are no Sellers yet";
             setCursor(13,15); cout<<"There are no requests yet";
-            while(1)
+            while(true)
             {
                 char key=_getch();
                 if(key==KEY_ESC) // for back
                     return -1;
-                else if(key=='p')
+                else if(key==KEY_F1)
                     return -2;
+                else if(key=='p')
+                    return -3;
             }
         }
         else
@@ -244,14 +252,14 @@ int firstPageOfAdmin(const Admin &admin)
             }
 
             for(int i=numberSellers-(remainingSellers+length),y=7 ; i<numberSellers-remainingSellers ; i++, y+=3)
-                sellerBox(53,y,i+1,admin.getSellerConst(i));
+                sellerBox(53,y,i+1,admin.getCopySellerAt(i));
             setCursor(89,32); cout<<page; // page number
 
             int result=keyboardControlAdmin(page, admin.numberRequests()==0 ? length*2+2 : length*2+4 ,
                                             remainingSellers,numberSellers,admin.numberRequests()!=0);
-            if(result==-6)
+            if(result==-7)
                 nextPage=true;
-            else if(result==-5)
+            else if(result==-6)
                 prevPage=true;
             else
                 return result;
@@ -287,10 +295,9 @@ int sellerPage(const Seller &seller,const Products &products)
     else
         { remainingProduct=0; length=numberProduct; }
 
-    while(1)
+    while(true)
     {
         system("cls");
-        char key='0'; int index=0;
         statusBar("Admin","BACK",true);
         setCursor(24,5); color(YELLOW); cout<<"Seller information"; color();
         drawLine(10,6,55,6,DARK_GRAY);
@@ -310,7 +317,7 @@ int sellerPage(const Seller &seller,const Products &products)
         }
         else if(prevPage)
         {
-            remainingProduct+=(length-3);
+            remainingProduct+=(length-2);
             length=8;
             prevPage=false; page--;
         }
@@ -320,50 +327,109 @@ int sellerPage(const Seller &seller,const Products &products)
             for(int i=numberProduct-(remainingProduct+length),y=7 ; i<numberProduct-remainingProduct ; i++, y+=3)
                 productBox(61,y,i+1,products.getCopyProduct(seller.getProductId(i)),1);
             setCursor(89,32); cout<<page; // page number
-            length=length+3; // 3 -> next , previous , add product
-        }
-        else
-        {
-            setCursor(75,15); cout<<"There are no products yet";
-            length=0;
-        }
-        while(key!=KEY_ENTER)
-        {
-            if(numberProduct!=0)
+            length+=2; // 2 -> next , previous
+
+            char key='0';  int index=0;
+            while(key!=KEY_ENTER)
             {
-                productButtonName(109,7,length-3,index); // 3 -> next , previous , add product
+                productButtonName(109,7,length-2,index); // 2 -> next , previous , add product
                 if(index==length-2)
                     remainingProduct+8<numberProduct ? color(BLACK,RED) : color(BLACK,DARK_GRAY);
                 setCursor(84,32); cout<<" < "; color();
                 if(index==length-1)
                     remainingProduct ? color(BLACK,RED) : color(BLACK,DARK_GRAY);
                 setCursor(92,32); cout<<" > "; color();
-            }
-            while(1)
-            {
-                key=_getch();
-                if(key==KEY_RIGHT)
-                    { index=(index+1)%length; break; }
-                else if(key==KEY_LEFT)
-                    { index=(index+length-1)%length; break; }
-                else if(key==KEY_DOWN)
-                    { index=(index+1)%length; break; }
-                else if(key==KEY_UP)
-                    { index=(index+length-1)%length; break; }
-                else if(key==KEY_ENTER)
+                while(true)
                 {
-                    if(index==length-1 && remainingProduct)
-                        { nextPage=true; break; }
-                    else if(index==length-2 && remainingProduct+8<numberProduct)
-                        { prevPage=true; break; }
-                    else if(index==length-3)
+                    key=_getch();
+                    if(key==KEY_DOWN)
+                    {
+                        index>=length-2 ? index=0 : index=(index+1)%length;
+                        break;
+                    }
+                    else if(key==KEY_UP)
+                    {
+                        index>=length-2 ? index=length-3 : index=(index+length-1)%length;
+                        break;
+                    }
+                    else if(index>=length-2 && key==KEY_RIGHT)
+                    {
+                        index+1>=length ? index-=1 : index+=1;
+                        break;
+                    }
+                    else if(index>=length-2 && key==KEY_LEFT)
+                    {
+                        index-1<=length-3 ? index+=1 : index-=1;
+                        break;
+                    }
+                    else if(key==KEY_ENTER)
+                    {
+                        if(index==length-1 && remainingProduct)
+                            { nextPage=true; break; }
+                        else if(index==length-2 && remainingProduct+8<numberProduct)
+                            { prevPage=true; break; }
+                        else if(index<length-2)
+                            return seller.getProductId(index+8*(page-1)); // 8 -> number of buttons options
+                    }
+                    else if(key==KEY_ESC) // for back
                         return -1;
-                    else if(index<length-3)
-                        return seller.getProductId(index+8*(page-1)); // 24 -> number of buttons options
+                    else if(key=='b' && remainingProduct+8<numberProduct)
+                        { prevPage=true; key=KEY_ENTER; break; }
+                    else if(key=='n' && remainingProduct)
+                        { nextPage=true; key=KEY_ENTER; break; }
                 }
-                else if(key==KEY_ESC) // for back
-                    return -2;
+            }
+        }
+        else
+        {
+            setCursor(75,15); cout<<"There are no products yet";
+            while(true)
+            {
+                char key=_getch();
+                if(key==KEY_ESC) // for back
+                    return -1;
             }
         }
     }
+}
+
+void keyboardControlAdminDialog(int x,int y,Colors background=RED)
+{
+    int index=0;
+    while(true)
+    {
+        if(index==0) color(BLACK,background);
+        setCursor(x,y); cout<<"  OK  "; color();
+        while(true)
+        {
+            char key=_getch();
+            if(key==KEY_LEFT || key==KEY_DOWN || key==KEY_RIGHT || key==KEY_UP)
+                { index=(index+1)%2; break; }
+            else if(key==KEY_ESC || (key==KEY_ENTER && index==0))
+                return ;
+        }
+    }
+}
+
+void shortcutsAdminDialog(const string& adminName)
+{
+    system("cls");
+    statusBar(adminName,"BACK");
+    setCursor(61,6); cout<<"Shortcuts";
+    drawLine(58,7,72,7,DARK_GRAY);
+    color(DARK_GRAY); drawRectangle(38,8,53,13); color();
+    setCursor(42,10); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"F1 "; color(); cout<<" : To show shortcuts Dialog.";
+    setCursor(42,12); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"c  "; color(); cout<<" : To confirm the seller request.";
+    setCursor(42,14); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"r  "; color(); cout<<" : To reject the seller request.";
+    setCursor(42,16); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"b  "; color(); cout<<" : To previous page.";
+    setCursor(42,18); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"n  "; color(); cout<<" : To next page.";
+    setCursor(42,20); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"ECS"; color(); cout<<" : To back or logout.";
+    drawRectangle(83,23,8,1);
+    keyboardControlAdminDialog(85,24);
 }

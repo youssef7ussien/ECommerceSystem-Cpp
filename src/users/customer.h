@@ -8,7 +8,7 @@ using namespace std;
 
 class PurchaseData {
 
-    string name, address, phoneNumber, email, paymentMethod, country;
+    string name, address, phoneNumber, email, country;
 
 public:
 
@@ -21,8 +21,6 @@ public:
     void setEmail(string);
     string getPhoneNumber() const;
     void setPhoneNumber(string);
-    string getPaymentMethod() const;
-    void setPaymentMethod(string);
     string getCountry() const;
     void setCountry(string);
     double shippingExpenses(double) const;
@@ -38,14 +36,14 @@ class Customer {
 
 public:
     Customer();
-    Customer(string);
+    explicit Customer(string);
     string getName() const;
     int cartLength() const;
     Queue<Product> getCart() const;
     void clearCart();
     PurchaseData getPurchaseData() const;
     void createPurchaseData(PurchaseData);
-    void addToCart(Product product);
+    void addToCart(const Product& product);
     Product removeFromCart();
     void printPurchaseData(Queue<Product>);
 };

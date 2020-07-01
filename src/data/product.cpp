@@ -4,51 +4,53 @@ int Product::count=0;
 
 Product::Product()
 {
+    this->id=-1;
     this->name="";
     this->categoryName="";
     this->price=0.0;
     this->quantity=0;
     this->description="";
-    this->id=-1;
 }
 
-Product::Product(string name,string categoryName,double price,string description)
+Product::Product(int id)
 {
-    this->name=name;
-    this->categoryName=categoryName;
-    this->price=price;
+    this->id=id;
+    count++;
+    this->name="";
+    this->categoryName="";
+    this->price=0.0;
     this->quantity=0;
-    this->description=description;
-    id=count++;
+    this->description="";
 }
 
 Product::Product(string name,string categoryName,double price,int quantity,string description)
 {
+    id=count++;
     this->name=name;
     this->categoryName=categoryName;
     this->price=price;
     this->quantity=quantity;
     this->description=description;
-    id=count++;
 }
 
 Product::Product(int id,string name,string categoryName,double price,int quantity,string description)
 {
+    this->id=id;
+    count++;
     this->name=name;
     this->categoryName=categoryName;
     this->price=price;
     this->quantity=quantity;
     this->description=description;
-    this->id=id;
 }
 
-bool Product::operator ==(Product product) const
+bool Product::operator ==(const Product& product) const
 {
     return (product.name==name && product.categoryName==categoryName &&
             product.price==price && product.description==description && product.id==id);
 }
 
-bool Product::operator !=(Product product) const
+bool Product::operator !=(const Product& product) const
 {
     return (product.name!=name && product.categoryName!=categoryName &&
             product.price!=price && product.description!=description && product.id!=id);
@@ -64,9 +66,9 @@ bool Product::operator !=(int id) const
     return (this->id!=id);
 }
 
-bool Product::operator ==(string subName) const
+bool Product::operator ==(const string &subName) const
 {
-    return name.find(subName)==std::string::npos ? false : true;
+    return name.find(subName)!=std::string::npos;
 }
 
 bool Product::outOfStock() const
@@ -100,7 +102,7 @@ int Product::generateId()
 
 void Product::setName(string newName)
 {
-    name = newName;
+    name=newName;
 }
 
 string Product::getName() const

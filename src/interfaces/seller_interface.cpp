@@ -58,7 +58,7 @@ int keyboardControl(int page,int length,int remainingProducts,int numberProducts
             remainingProducts ? color(BLACK,RED) : color(BLACK,DARK_GRAY);
         setCursor(88,32); cout<<" > "; color();
 
-        while(1)
+        while(true)
         {
             key=_getch();
             if(key==KEY_RIGHT)
@@ -98,26 +98,28 @@ int keyboardControl(int page,int length,int remainingProducts,int numberProducts
             else if(key==KEY_ENTER)
             {
                 if(index==length-1 && remainingProducts)
-                    return -5;
+                    return -6;
                 else if(index==length-2 && remainingProducts+8<numberProducts)
-                    return -4;
+                    return -5;
                 else if(index==length-3)
-                    return -3;
+                    return -4;
                 else if(index==length-4)
-                    return -2;
+                    return -3;
                 else if(index<length-4)
                     return (index+24*(page-1)); // 24 -> number of buttons options
             }
             else if(key==KEY_ESC) // for back
                 return -1;
-            else if(key=='p')
+            else if(key==KEY_F1)
                 return -2;
-            else if(key=='a')
+            else if(key=='p')
                 return -3;
-            else if(key=='b' && remainingProducts+8<numberProducts)
+            else if(key=='a')
                 return -4;
-            else if(key=='n' && remainingProducts)
+            else if(key=='b' && remainingProducts+8<numberProducts)
                 return -5;
+            else if(key=='n' && remainingProducts)
+                return -6;
         }
     }
     return -1;
@@ -126,8 +128,8 @@ int keyboardControl(int page,int length,int remainingProducts,int numberProducts
 int keyboardControl() // use in firstPageOfSeller()
 {
     setCursor(70,20); cout<<"There are no products yet";
-    char key='0'; int index=0;
-    while(key!=KEY_ENTER)
+    int index=0;
+    while(true)
     {
         if(index==0) color(BLACK,RED);
         setCursor(14,24); cout<<"     Profile      "; color();
@@ -135,22 +137,23 @@ int keyboardControl() // use in firstPageOfSeller()
         if(index==1) color(BLACK,RED);
         setCursor(14,27); cout<<"   Add Product    "; color();
 
-        while(1)
+        while(true)
         {
-            key=_getch();
+            char key=_getch();
             if(key==KEY_DOWN || key==KEY_UP)
                 { index=(index+1)%2; break; }
             else if(key==KEY_ENTER)
-                return index==0 ? -2 : -3;
+                return index==0 ? -3 : -4;
             else if(key==KEY_ESC) // for back
                 return -1;
-            else if(key=='p')
+            else if(key==KEY_F1)
                 return -2;
-            else if(key=='a')
+            else if(key=='p')
                 return -3;
+            else if(key=='a')
+                return -4;
         }
     }
-    return -1;
 }
 
 int firstPageOfSeller(const Seller &seller,Product *products[])
@@ -162,7 +165,7 @@ int firstPageOfSeller(const Seller &seller,Product *products[])
     else
         { remainingProducts=0; length=numberProducts; }
 
-    while(1)
+    while(true)
     {
         system("cls");
         statusBar(seller.getFirstName());
@@ -174,6 +177,8 @@ int firstPageOfSeller(const Seller &seller,Product *products[])
         drawRectangle(12,23,20,1); // Profile box
         drawRectangle(12,26,20,1); // Add product box
         drawLine(41,5,41,30,DARK_GRAY);
+        setCursor(8,32); color(DARK_GRAY); cout<<"* Press ";
+        color(BROWN); cout<<"F1"; color(DARK_GRAY); cout<<" for keyboard shortcuts"; color();
 
         if(seller.numberProducts()!=0)
         {
@@ -195,9 +200,9 @@ int firstPageOfSeller(const Seller &seller,Product *products[])
                 productBox(44,y,i+1,*products[i],3);
             setCursor(85,32); cout<<page; // page number
             int result=keyboardControl(page,length*3+4,remainingProducts,numberProducts);
-            if(result==-5)
+            if(result==-6)
                 nextPage=true;
-            else if(result==-4)
+            else if(result==-5)
                 prevPage=true;
             else
                 return result;
@@ -208,17 +213,17 @@ int firstPageOfSeller(const Seller &seller,Product *products[])
     }
 }
 
-bool validationInput(const Product &product,string price,string quantity) // use in interfaceAddProduct()
+bool validationInput(const Product &product,const string &price,const string &quantity) // use in interfaceAddProduct()
 {
     bool validation=true;
-    if(product.getName()=="" || !validationRegex(PRODUCT_NAME_PATTERN,product.getName()))
+    if(product.getName().empty() || !validationRegex(PRODUCT_NAME_PATTERN,product.getName()))
     {
         validation=false;
         setCursor(89,7); color(DARK_RED);
         cout<<"Incorrect name";
         color();
     }
-    if(product.getCategoryName()=="" || !validationRegex(PRODUCT_CATEGORY_PATTERN,product.getCategoryName()))
+    if(product.getCategoryName().empty() || !validationRegex(PRODUCT_CATEGORY_PATTERN,product.getCategoryName()))
     {
         validation=false;
         setCursor(89,11); color(DARK_RED);
@@ -236,7 +241,7 @@ bool validationInput(const Product &product,string price,string quantity) // use
         setCursor(89,19); color(DARK_RED);
         cout<<"Incorrect quantity";
     }
-    if(product.getDescription()=="" || !validationRegex(PRODUCT_DESCRIPTION_PATTERN,product.getDescription()))
+    if(product.getDescription().empty() || !validationRegex(PRODUCT_DESCRIPTION_PATTERN,product.getDescription()))
     {
         validation=false;
         setCursor(102,28); color(DARK_RED);
@@ -246,7 +251,7 @@ bool validationInput(const Product &product,string price,string quantity) // use
     return validation;
 }
 
-bool interfaceAddProduct(string sellerName,Product &product)
+bool interfaceAddProduct(const string &sellerName,Product &product)
 {
     system("cls");
     char key='0';  int index=2;
@@ -266,7 +271,7 @@ bool interfaceAddProduct(string sellerName,Product &product)
     drawRectangle(50,29,14,1); // Again box
     drawRectangle(66,29,14,1); // Exit box
 
-    string price="",quantity="";
+    string price,quantity;
     while(key!=KEY_ENTER)
     {
         setCursor(52,30);
@@ -308,9 +313,9 @@ bool interfaceAddProduct(string sellerName,Product &product)
             index=0;
             continue;
         }
-        while(1)
+        while(true)
         {
-            key=getch();
+            key=_getch();
             if(key==KEY_RIGHT)
                 { index=(index+1)%2; break; }
             else if(key==KEY_LEFT)
@@ -325,20 +330,21 @@ bool interfaceAddProduct(string sellerName,Product &product)
             setCursor(89,7);   cout<<"                       ";
             setCursor(89,11);  cout<<"                       ";
             setCursor(89,15);  cout<<"                       ";
-            setCursor(102,24); cout<<"                       ";
+            setCursor(89,19);  cout<<"                       ";
+            setCursor(102,28); cout<<"                       ";
         }
     }
     return false;
 }
 
-string editField(int x,int y,string text,string patternRegex,int width,int height=1) // use in interfaceEditProduct()
+string editField(int x,int y,string text,const string& patternRegex,int width,int height=1) // use in interfaceEditProduct()
 {
     setCursor(89,y+height); cout<<"               ";
     initialBox(x,y,width,text.size(),height);
-    while(1)
+    while(true)
     {
         text=inputText();
-        if(text=="" || !validationRegex(patternRegex,text))
+        if(text.empty() || !validationRegex(patternRegex,text))
         {
             setCursor(x+2,y+1); clearLine(text.size());
             setCursor(89,y+height); cout<<"               "; wait(150);
@@ -358,10 +364,9 @@ string editField(int x,int y,string text,string patternRegex,int width,int heigh
     }
 }
 
-bool interfaceEditProduct(string sellerName,Product &product)
+bool interfaceEditProduct(const string& sellerName,Product &product)
 {
     system("cls");
-    char key='0';  int index=0;
     statusBar(sellerName,"BACK");
     setCursor(45,5); cout<<"Name";
     drawRectangle(44,6,42,1); // Name box
@@ -379,7 +384,8 @@ bool interfaceEditProduct(string sellerName,Product &product)
         drawRectangle(33,4*i+6,8,1);
     drawRectangle(20,15,8,1);
     drawRectangle(54,25,22,1); // DONE box
-    while(key!=KEY_ENTER)
+    int index=0;
+    while(true)
     {
         if(index==6) // Name
         {
@@ -425,19 +431,18 @@ bool interfaceEditProduct(string sellerName,Product &product)
         if(index==4)  color(BLACK,RED);
         cout<<"        DONE        "; color();
 
-        while(1)
+        while(true)
         {
-            key=_getch();
+            char key=_getch();
             if(key==KEY_DOWN)
                 { index=(index+1)%5; break; }
             else if(key==KEY_UP)
                 { index=(index+4)%5; break; }
             else if(key==KEY_ENTER)
             {
-
                 if(index>=0 && index<=3)
                 {
-                    index+=6; key='0';
+                    index+=6;
                     break;
                 }
                 else if(index==4)
@@ -448,6 +453,61 @@ bool interfaceEditProduct(string sellerName,Product &product)
         }
     }
     return false;
+}
+
+void keyboardControlSellerDialog(int x,int y,Colors background=RED)
+{
+    int index=0;
+    while(true)
+    {
+        if(index==0) color(BLACK,background);
+        setCursor(x,y); cout<<"  OK  "; color();
+        while(true)
+        {
+            char key=_getch();
+            if(key==KEY_LEFT || key==KEY_DOWN || key==KEY_RIGHT || key==KEY_UP)
+                { index=(index+1)%2; break; }
+            else if(key==KEY_ESC || (key==KEY_ENTER && index==0))
+                return ;
+        }
+    }
+}
+
+void shortcutsSellerDialog(const string& sellerName)
+{
+    system("cls");
+    statusBar(sellerName,"BACK");
+    setCursor(61,6); cout<<"Shortcuts";
+    drawLine(58,7,72,7,DARK_GRAY);
+    color(DARK_GRAY); drawRectangle(38,8,53,13); color();
+    setCursor(42,10); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"F1 "; color(); cout<<" : To show shortcuts Dialog.";
+    setCursor(42,12); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"p  "; color(); cout<<" : To show profile.";
+    setCursor(42,14); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"a  "; color(); cout<<" : To add product.";
+    setCursor(42,16); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"b  "; color(); cout<<" : To previous page.";
+    setCursor(42,18); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"n  "; color(); cout<<" : To next page.";
+    setCursor(42,20); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"ECS"; color(); cout<<" : To back or logout.";
+    drawRectangle(83,23,8,1);
+    keyboardControlSellerDialog(85,24);
+}
+
+void registerDoneDialog()
+{
+    system("cls");
+    drawRectangle(50,1,30,1,2); // Register box
+    setCursor(62,2); cout<<"Register";
+    color(RED); drawRectangle(38,6,53,11); color();
+    setCursor(42,8); cout<<"Thanks for registering with us.";
+    setCursor(42,10); cout<<"Please wait for admin approval, log in to";
+    setCursor(42,12); cout<<"verify account confirmation.";
+    drawLine(50,14,80,14,DARK_GRAY);
+    drawRectangle(81,15,8,1);
+    keyboardControlSellerDialog(83,16);
 }
 
 

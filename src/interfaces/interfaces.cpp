@@ -4,16 +4,40 @@
 #include "customer_interface.h"
 #include "functions.h"
 #include "graphics.h"
+#include <iomanip>
 
 #define NAME_PATTERN        "^[a-zA-z0-9 \\-]{3,15}$"
 #define USERNAME_PATTERN    "^[a-zA-z0-9_.]{3,30}$"
 #define EMAIL_PATTERN       "^[\\w\\._]{3,21}@[\\w\\._]{2,11}\\.\\w{2,4}$"
 #define PASSWORD_PATTERN    "^[a-zA-z0-9_.]{8,30}$"
 
+void aboutDialog()
+{
+    color(RED); drawRectangle(38,8,54,7); color();
+    clearMultiLines(39,9,7,52);
+    setCursor(50,10); cout<<"E-Commerce Management System";
+    setCursor(57,12); color(DARK_GRAY);
+    cout<<"version "; color(); cout<<"1.0";
+    color(); drawRectangle(82,13,8,1);
+    int index=0;
+    while(true)
+    {
+        if(index==0) color(BLACK,RED);
+        setCursor(84,14); cout<<"  OK  "; color();
+        while(true)
+        {
+            char key=_getch();
+            if(key==KEY_LEFT || key==KEY_DOWN || key==KEY_RIGHT || key==KEY_UP)
+                { index=(index+1)%2; break; }
+            else if(key==KEY_ESC || (key==KEY_ENTER && index==0))
+                return ;
+        }
+    }
+}
+
 int interfaceLoginAs()
 {
     system("cls");
-    char key=80;  int index=0;
 
     drawRectangle(50,1,30,1,2); // login as box
     setCursor(62,2); cout<<"Login as";
@@ -24,7 +48,8 @@ int interfaceLoginAs()
     drawLine(50,16,82,16);
     drawRectangle(67,17,14,1); // Exit box
 
-    while(key!=13)
+    int index=0;
+    while(true)
     {
         if(index==0)  color(BLACK,RED);
         setCursor(57,5); cout<<"      Admin       "; color();
@@ -42,9 +67,9 @@ int interfaceLoginAs()
         if(index==4)  color(BLACK,RED);
         cout<<"    EXIT    "; color();
         setCursor(0,28);
-        while(1)
+        while(true)
         {
-            key=_getch();
+            char key=_getch();
             if(key==KEY_DOWN)
                 { index=(index+1)%5; break; }
             else if(key==KEY_UP)
@@ -52,10 +77,9 @@ int interfaceLoginAs()
             else if(key==KEY_ENTER)
                 return index;
             else if(key==KEY_ESC)
-                    return 4;
+                return 4;
         }
     }
-    return index;
 }
 
 void loginDesign()
@@ -70,7 +94,7 @@ void loginDesign()
     drawRectangle(66,14,14,1); // Exit box
 }
 
-int chooseMethod()
+int chooseMethodLogin()
 {
     color(RED); drawRectangle(38,8,54,3); color();
     setCursor(39,9); clearLine(52);
@@ -79,16 +103,15 @@ int chooseMethod()
     drawRectangle(40,9,15,1);
     drawRectangle(75,9,15,1);
 
-    char key='0';
     int index=0;
-    while(key!=KEY_ENTER)
+    while(true)
     {
         if(index==0) color(BLACK,RED);
         setCursor(42,10); cout<<"    LOGIN    "; color();
 
         if(index==1) color(BLACK,RED);
         setCursor(77,10); cout<<"  REGISTER   "; color();
-        while(1)
+        while(true)
         {
             char key=_getch();
             if(key==KEY_LEFT || key==KEY_RIGHT)
@@ -96,17 +119,16 @@ int chooseMethod()
             else if(key==KEY_ENTER)
                 return index;
             else if(key==KEY_ESC)
-                    return -1;
+                return -1;
         }
     }
-    return -1;
 }
 
 bool interfaceLoginAdmin()
 {
     system("cls");
     char key='0';  int index=2;
-    string username="",password="";
+    string username,password;
     loginDesign();
 
     while(key!=KEY_ENTER)
@@ -122,12 +144,10 @@ bool interfaceLoginAdmin()
         if(index==2)
         {
             initialBox(45,6,40,username.size());
-            username="";
             username=inputText();
             drawRectangle(45,6,40,1);
 
             initialBox(45,10,40,password.size());
-            password="";
             password=inputText();
 
             if(username=="admin" && password=="admin")
@@ -140,7 +160,7 @@ bool interfaceLoginAdmin()
             continue;
         }
 
-        while(1)
+        while(true)
         {
             key=_getch();
             if(key==KEY_RIGHT)
@@ -163,7 +183,7 @@ bool interfaceLoginSeller(const Sellers &sellers,int &seller)
 {
     system("cls");
     char key='0';  int index=2;
-    string email="",password="";
+    string email,password;
     loginDesign();
 
     while(key!=KEY_ENTER)
@@ -195,7 +215,7 @@ bool interfaceLoginSeller(const Sellers &sellers,int &seller)
             continue;
         }
 
-        while(1)
+        while(true)
         {
             key=_getch();
             if(key==KEY_RIGHT)
@@ -214,7 +234,7 @@ bool interfaceLoginSeller(const Sellers &sellers,int &seller)
     return false;
 }
 
-bool validationInput(const Account &account,string confirmPassword) // Use in interfaceRegister()
+bool validationInput(const Account &account,const string& confirmPassword) // Use in interfaceRegister()
 {
     bool validation=true;
     if(!validationRegex(NAME_PATTERN,account.getFirstName()))
@@ -260,7 +280,6 @@ bool validationInput(const Account &account,string confirmPassword) // Use in in
 bool interfaceRegister(Account &account)
 {
     system("cls");
-    char key='0';  int index=2;
     drawRectangle(50,1,30,1,2); // login box
     setCursor(62,2); cout<<"Register";
     drawRectangle(44,6,42,1); // firstName box
@@ -277,7 +296,8 @@ bool interfaceRegister(Account &account)
     setCursor(45,25); cout<<"Confirm Password";
     drawRectangle(50,30,14,1); // Again box
     drawRectangle(66,30,14,1); // Exit box
-    string confirmPassword="";
+    string confirmPassword;
+    char key='0';  int index=2;
     while(key!=KEY_ENTER)
     {
         setCursor(52,31);
@@ -314,12 +334,15 @@ bool interfaceRegister(Account &account)
             confirmPassword=inputText();
 
             if(validationInput(account,confirmPassword))
+            {
+                registerDoneDialog();
                 return true;
+            }
             drawRectangle(44,26,42,1);
             index=0;
             continue;
         }
-        while(1)
+        while(true)
         {
             key=_getch();
             if(key==KEY_RIGHT)
@@ -346,49 +369,40 @@ bool interfaceRegister(Account &account)
 
 bool interfaceExitGame(int x,int y)
 {
-    char key='0';  int index=0;
-    drawRectangle(x,y,43,5); //35 11
+    drawRectangle(x,y,43,5);
     setCursor(x+1,y+1); color();
     cout<<"               Are You Sure ?              ";
-    setCursor(x+1,y+2); clearLine(43);
-    setCursor(x+1,y+3); clearLine(43);
-    setCursor(x+1,y+4); clearLine(43);
-    setCursor(x+1,y+5); clearLine(43);
+    clearMultiLines(x+1,y+2,4,43);
     drawRectangle(x+2,y+3,11,1);
     drawRectangle(x+33,y+3,8,1);
 
-    while(key!=KEY_ENTER)
+    int index=0;
+    while(true)
     {
-        setCursor(x+4,y+4); color();
         if(index==1)  color(BLACK,RED);
-        cout<<"   YES   "; color();
+        setCursor(x+4,y+4); cout<<"   YES   "; color();
 
-        setCursor(x+35,y+4);
         if(index==0)  color(BLACK,RED);
-        cout<<"  NO  "; color();
-        setCursor(0,26);
-        while(1)
+        setCursor(x+35,y+4); cout<<"  NO  "; color();
+        while(true)
         {
-            key=_getch();
-            if(key==KEY_RIGHT)
+            char key=_getch();
+            if(key==KEY_RIGHT || key==KEY_LEFT)
                 { index=(index+1)%2; break; }
-            else if(key==KEY_LEFT)
-                { index=(index+3)%2; break; }
             else if(key==KEY_ENTER)
-                return index==1 ? true : false;
+                return index==1;
             else if(key==KEY_ESC)
                 return false;
         }
     }
-    return false;
 }
 
-string editField(int x,int y,string text,string patternRegex,int width)
+string editField(int x,int y,string text,const string& patternRegex,int width)
 {
     setCursor(89,y+1); cout<<"               ";
     initialBox(x,y,width,text.size());
 
-    while(1)
+    while(true)
     {
         text=inputText();
         if(text=="" || !validationRegex(patternRegex,text))
@@ -414,7 +428,7 @@ string editField(int x,int y,string text,string patternRegex,int width)
 bool interfaceProfile(Account &account)
 {
     system("cls");
-    char key='0';  int index=0;
+    int index=0;
     statusBar(account.getFirstName(),"BACK");
     drawRectangle(44,7,42,1); // firstName box
     setCursor(45,6); cout<<"First name";
@@ -441,7 +455,7 @@ bool interfaceProfile(Account &account)
         drawRectangle(33,i==3 ? 23 : 4*i+7,8,1);
     drawRectangle(54,27,22,1); // DONE box
 
-    while(key!=KEY_ENTER)
+    while(true)
     {
         if(index==6) // Name
         {
@@ -484,9 +498,9 @@ bool interfaceProfile(Account &account)
         if(index==4)  color(BLACK,RED);
         cout<<"        DONE        "; color();
 
-        while(1)
+        while(true)
         {
-            key=_getch();
+            char key=_getch();
             if(key==KEY_DOWN)
                 { index=(index+1)%5; break; }
             else if(key==KEY_UP)
@@ -496,7 +510,7 @@ bool interfaceProfile(Account &account)
 
                 if(index>=0 && index<=3)
                 {
-                    index+=6; key='0';
+                    index+=6;
                     break;
                 }
                 else if(index==4)
@@ -506,95 +520,180 @@ bool interfaceProfile(Account &account)
                 return false;
         }
     }
-    return false;
 }
 
-void productDetails(int x,int y,const Product product,User user=CUSTOMER)
+int keyboardBuyButton(int x,int y,string buttonName)
+{
+    int index=0;
+    while(true)
+    {
+        if(index==0) color(BLACK,RED);
+        setCursor(x,y); cout<<buttonName; color();
+        while(true)
+        {
+            char key=_getch();
+            if(key==KEY_LEFT || key==KEY_DOWN || key==KEY_RIGHT || key==KEY_UP)
+                { index=(index+1)%2; break; }
+            else if(key==KEY_ENTER && index==0)
+                return index;
+            else if(key==KEY_ESC)
+                return -1;
+        }
+    }
+}
+
+int keyboardBuyButton(int x,int y)
+{
+    int index=0;
+    while(true)
+    {
+        if(index==0) color(BLACK,RED);
+        setCursor(x,y); cout<<"       Edit       "; color();
+
+        if(index==1) color(BLACK,RED);
+        setCursor(x+23,y); cout<<"      Delete      "; color();
+        while(true)
+        {
+            char key=_getch();
+            if(key==KEY_LEFT || key==KEY_RIGHT)
+                { index=(index+1)%2; break; }
+            else if(key==KEY_ENTER)
+                return index;
+            else if(key==KEY_ESC)
+                return -1;
+            else if(key=='e')
+                return 0;
+            else if(key=='d')
+                return 1;
+        }
+    }
+}
+
+int productDetails(const Product& product,const string &userName,User user=CUSTOMER)
 {
     system("cls");
-    drawRectangle(x,y,83,14); // Border Box
-    drawRectangle(x+2,y+1,60,1); // Name Box
-    setCursor(x+4,y+2); cout<<product.getName();
-    drawRectangle(x+66,y+1,15,1); // Price Box
-    setCursor(x+68,y+2); cout<<product.getPrice()<<" $";
-    setCursor(x+3,y+4); cout<<product.getDescription(); // Description
+    statusBar(userName,"BACK");
+    drawRectangle(55,5,19,1);
+    setCursor(58,6); color(CYAN); cout<<"PRODUCT DETAILS"; color();
+    drawRectangle(23,8,83,20); // Border Box
+    color(DARK_GRAY); drawRectangle(25,9,60,1); color(); // Name Box
+    setCursor(29,10); color(CYAN); cout<<product.getName(); color();
+
+    color(DARK_GRAY); drawRectangle(88,9,16,1); color(); // Price Box
+    setCursor(90,10); cout<<setw(12)<<setprecision(8)<<product.getPrice()<<" $";
+
+    color(DARK_GRAY); drawRectangle(31,12,67,1); // Category Box
+    setCursor(33,13); color(YELLOW); cout<<"Category : ";
+    color(); cout<<product.getCategoryName(); // Category name
+    drawLine(50,15,80,15);
+    if(product.getDescription().size()<80)
+        { setCursor(26,17); cout<<product.getDescription(); }
+    else
+    {
+        setCursor(26,17); cout<<product.getDescription().substr(0,80);
+        setCursor(26,18); cout<<product.getDescription().substr(80);
+    }
+
+    if(product.getQuantity()==0)
+    {
+        setCursor(58,31); color(WHITE,DARK_RED);
+        cout<<"  Out of stock  "; color();
+    }
+    if(user!=CUSTOMER)
+    {
+        setCursor(26,25); color(YELLOW);
+        cout<<"Quantity in stock : "; color();
+        cout<<product.getQuantity();
+    }
+
     switch(user)
     {
         case CUSTOMER:
         {
-            drawRectangle(x+21,y+11,39,1); // BUY Box
-            setCursor(x+39,y+12); cout<<"BUY";
+            drawRectangle(45,26,39,1);
+            return keyboardBuyButton(47,27,"                 BUY                 ");
         } break;
         case SELLER:
         {
-            drawRectangle(x+21,y+11,16,1);
-            setCursor(x+28,y+12); cout<<"Edit";
-            drawRectangle(x+50,y+11,16,1);
-            setCursor(x+56,y+12); cout<<"Delete";
+            drawRectangle(43,26,20,1);
+            drawRectangle(66,26,20,1);
+            return keyboardBuyButton(45,27);
         } break;
         case ADMIN:
         {
-            drawRectangle(x+21,y+11,39,1);
-            setCursor(x+38,y+12); cout<<"Delete";
+            drawRectangle(45,26,39,1);
+            return keyboardBuyButton(47,27,"                DELETE               ");
         } break;
     }
+
+    return -1;
 }
 
 void interfaceAdmin(Admin &admin)
 {
-    while(1)
+    while(true)
     {
         int result=firstPageOfAdmin(admin);
-        if(result==-1)
-            return;
-        else if(result==-2)
+        if(result==-1) // For back
         {
+            if(logOutDialog(admin.getFirstName()))
+                return;
+        }
+        else if(result==-2) // For profile
+            shortcutsAdminDialog(admin.getFirstName());
+
+        else if(result==-3) // For profile
             interfaceProfile(*admin.getAccount());
-        }
-        else if(result==-3)
-        {
+
+        else if(result==-4) // For confirm
             admin.confirmAddSeller();
-        }
-        else if(result==-4)
-        {
+
+        else if(result==-5) // For reject
             admin.rejectAddSeller();
-        }
-        else if(!(result%2))
+
+        else if(!(result%2)) // For Show seller page
         {
-            int id=sellerPage(*admin.getSellerAt(result/2),admin.getProducts());
-            if(id==-2)
-                continue;
-            else if(id==-1)
-                continue;
-            else
+            while(true)
             {
-                productDetails(15,1,admin.getProduct(id));
-                setCursor(0,31); system("pause");
+                int id=sellerPage(*admin.getSellerAt(result/2),admin.getProducts());
+                if(id==-1)
+                    break;
+                else
+                {
+                    int index=productDetails(admin.getProduct(id),admin.getFirstName(),ADMIN);
+                    if(index==0)
+                    {
+                        admin.deleteProduct(id);
+                        admin.getSellerAt(result/2)->deleteProductId(id);
+                    }
+                }
             }
         }
-        else if(result%2)
-        {
-
-        }
+        else if(result%2) // For delete seller
+            admin.deleteSeller(result/2);
     }
 }
 
-void editProduct(string sellerName,Product &product,Products &products) // Use in interfaceSeller()
+void editProduct(const string& sellerName,Product &product,Products &products) // Use in interfaceSeller()
 {
     string oldCategoryName=product.getCategoryName();
     if(interfaceEditProduct(sellerName,product))
     {
-        productDetails(15,1,product,SELLER);
-        setCursor(0,31); system("pause");
+        productDetails(product,sellerName,SELLER);
+        if(oldCategoryName!=product.getCategoryName())
+            products.changeCategory(product.getId(),oldCategoryName,product.getCategoryName());
     }
-    if(oldCategoryName!=product.getCategoryName())
-        products.changeCategory(product.getId(),oldCategoryName,product.getCategoryName());
 }
 
 void interfaceSeller(Seller &seller,Products &products)
 {
-    while(1)
+    while(true)
     {
+        /**
+         *   The dual pointer is used to contain the addresses
+         *    of the seller's products so that they can be accessed
+         *    and modified to be modified on the original product.
+         */
         Product **sellerProducts;
         sellerProducts=new Product*[seller.numberProducts()];
         seller.getProducts(sellerProducts,products.getProducts());
@@ -602,31 +701,40 @@ void interfaceSeller(Seller &seller,Products &products)
 
         if(result==-1) // For back
         {
+            if(!logOutDialog(seller.getFirstName()))
+                continue;
+
             delete[] sellerProducts;
             delete sellerProducts;
             return;
         }
-        else if(result==-2) // For Profile
-        {
+        else if(result==-2) // For shortcuts
+            shortcutsSellerDialog(seller.getFirstName());
+
+        else if(result==-3) // For Profile
             interfaceProfile(*seller.getAccount());
-        }
-        else if(result==-3) // For add Product
+
+        else if(result==-4) // For add Product
         {
             Product product;
             if(interfaceAddProduct(seller.getFirstName(),product))
             {
-                product.generateId();
+                seller.addProductId(product.generateId());
                 products.addProduct(product);
-                seller.addProductId(product.getId());
             }
         }
         else if(!(result%3)) // For show Product
         {
-            productDetails(15,1,*sellerProducts[result/3],SELLER);  // 3 -> number of buttons in per row
-            setCursor(0,31); system("pause");
+            // 3 -> number of buttons in per row
+            int index=productDetails(*sellerProducts[result/3],seller.getFirstName(),SELLER);
+            if(index==0)
+                editProduct(seller.getFirstName(),*sellerProducts[result/3],products);
+            else if(index==1)
+                products.deleteProduct(seller.deleteProductIdAt(result/3));
         }
         else if(result%3==1) // For edit Product
             editProduct(seller.getFirstName(),*sellerProducts[(result-1)/3],products);
+
         else if(result%3==2) // For delete Product
             products.deleteProduct(seller.deleteProductIdAt((result-2)/3));
 
@@ -673,18 +781,22 @@ void shoppingCart(Customer &customer,Products &products)
     }
 }
 
+void showProductDetails(Customer &customer,Product &product)
+{
+    int index=productDetails(product,customer.getName());
+    if(index==0)
+        buyProduct(customer,product);
+}
+
 void showAllProducts(Customer &customer,Products &products)
 {
-    while(1)
+    while(true)
     {
         int result=showProducts(customer.getName(),products.getProducts());
         if(result==-1)
             return;
         else if(!(result%2)) // For More
-        {
-            productDetails(15,1,products.getCopyProductAt(result/2));  // 2 -> number of buttons in per box
-            setCursor(0,31); system("pause");
-        }
+            showProductDetails(customer,*products.getProductAt(result/2));
         else if(result%2) // For Buy
             buyProduct(customer,*products.getProductAt(result/2));
     }
@@ -692,7 +804,7 @@ void showAllProducts(Customer &customer,Products &products)
 
 void showProductsOfCategory(Customer &customer,Products &products,Category category)
 {
-    while(1)
+    while(true)
     {
         int result=showProducts(customer.getName(),
                                 products.getProductsOfCategory(category.getProductsId()),
@@ -700,12 +812,27 @@ void showProductsOfCategory(Customer &customer,Products &products,Category categ
         if(result==-1)
             return;
         else if(!(result%2)) // For More
-        {
-            productDetails(15,1,products.getCopyProduct(category[result/2]));  // 2 -> number of buttons in per box
-            setCursor(0,31); system("pause");
-        }
+            showProductDetails(customer,*products.getProduct(category[result/2]));
         else if(result%2) // For Buy
             buyProduct(customer,*products.getProduct(category[result/2]));
+    }
+}
+
+void searchForProducts(Customer &customer,Products &products)
+{
+    List<Product> productsFounded;
+    string text=searchPage(customer.getName(),products.getProducts(),productsFounded);
+    if(text.empty())
+        return;
+    while(true)
+    {
+        int result=showProducts(customer.getName(),productsFounded,"*"+text);
+        if(result==-1)
+            break;
+        else if(!(result%2))
+            showProductDetails(customer,*products.getProduct(productsFounded.getCopyItemAt(result/2).getId()));
+        else if(result%2)
+            buyProduct(customer,*products.getProduct(productsFounded.getCopyItemAt(result/2).getId()));
     }
 }
 
@@ -721,11 +848,13 @@ void interfaceCustomer(Products &products)
     system("cls");
     int numCategories=products.categoriesLength();
     if(numCategories>10) numCategories=10;
-    while(1)
+    while(true)
     {
         int result=firstPageOfCustomer(customer,products);
         if(result==-1) // For Logout
         {
+            if(!logOutDialog(customer.getName()))
+                continue;
             if(customer.cartLength()!=0)
             {
                 int length=customer.cartLength();
@@ -734,25 +863,16 @@ void interfaceCustomer(Products &products)
             }
             return;
         }
+
         else if(result==-2) // For search
-        {
-            int id=-1;
-            int button=searchPage(customer.getName(),products.getProducts(),id);
-            if(button==-1)
-                continue;
-            if(button==0)
-            {
-                productDetails(15,1,products.getCopyProduct(id));
-                setCursor(0,31); system("pause");
-            }
-            else if(button==1)
-                buyProduct(customer,*products.getProduct(id));
-        }
+            searchForProducts(customer,products);
+
         else if(result==-3) // For shopping cart
             shoppingCart(customer,products);
+
         else if(result==-4) // For show all categories
         {
-            while(1)
+            while(true)
             {
                 int index=showCategories(customer.getName(),products.getCategories());
                 if(index==-1)
@@ -760,15 +880,19 @@ void interfaceCustomer(Products &products)
                 showProductsOfCategory(customer,products,products.getCategories().getCopyItemAt(index));
             }
         }
+
         else if(result==-5) // For all products
             showAllProducts(customer,products);
+
+        else if(result==-6) // For show shortcuts
+            shortcutsCustomerDialog(customer.getName());
+
         else if(result<numCategories) // For products of category
              showProductsOfCategory(customer,products,products.getCategories().getCopyItemAt(result));
+
         else if(!((result-numCategories)%2)) // For more in first page
-        {
-            productDetails(15,1,products.getCopyProductAt((result-numCategories)/2));  // 2 -> number of buttons in per box
-            setCursor(0,31); system("pause");
-        }
+            showProductDetails(customer,*products.getProductAt((result-numCategories)/2));
+
         else if(((result-numCategories)%2)) // For buy in first page
             buyProduct(customer,*products.getProductAt((result-numCategories)/2));
     }

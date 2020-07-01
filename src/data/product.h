@@ -2,8 +2,6 @@
 #define PRODUCT_H_INCLUDED
 
 #include<iostream>
-#include<string>
-
 using namespace std;
 
 class Product {
@@ -14,7 +12,7 @@ class Product {
 public:
 
     Product();
-    Product(string, string, double, string);
+    explicit Product(int);
     Product(string, string, double, int, string);
     Product(int, string, string, double, int, string);
     bool outOfStock() const;
@@ -32,12 +30,11 @@ public:
 	string getCategoryName() const;
 	void setDescription(string);
 	string getDescription() const;
-	bool operator ==(Product) const;
-	bool operator !=(Product) const;
+	bool operator ==(const Product&) const;
+	bool operator !=(const Product&) const;
 	bool operator ==(int) const;
 	bool operator !=(int) const;
-	bool operator ==(string) const;
-	bool operator !=(string) const;
+	bool operator ==(const string&) const;
 };
 
 #endif // PRODUCT_H_INCLUDED

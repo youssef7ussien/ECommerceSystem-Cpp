@@ -134,6 +134,38 @@ public:
 		return false;
 	}
 
+	bool removeAt(int index,type &item)
+	{
+        if(index==0)
+		{
+			item=head->item;
+			return removeFirst();
+		}
+        else if(index==length-1)
+		{
+			item=tail->item;
+			return removeLast();
+		}
+		else if(index>0 && index<length)
+        {
+			Node *cur, *prev;
+			cur = head->next;
+			prev = head;
+			for (int i = 1; i<index; i++)
+			{
+				prev = cur;
+				cur = cur->next;
+			}
+            prev->next = cur->next;
+            cur->next = NULL;
+            item=cur->item;
+            delete cur;
+            length--;
+            return true;
+		}
+		return false;
+	}
+
     template<typename secondType>
 	bool remove(secondType element)
 	{
@@ -232,13 +264,27 @@ public:
 	}
 
 	template<typename secondType>
+	List<type> multiSearch(secondType element) const
+	{
+		List<type> typeList;
+		Node *cur=head;
+		while(cur!=NULL)
+		{
+			if(cur->item==element)
+				typeList.insertLast(cur->item);
+			cur=cur->next;
+		}
+		return typeList;
+	}
+
+	template<typename secondType>
 	bool contain(secondType element) const
 	{
-		Node *cur = head;
-		while (cur != NULL) {
-			if (cur->item == element)
+		Node *cur=head;
+		while (cur!=NULL) {
+			if (cur->item==element)
 			    return true;
-			cur = cur->next;
+			cur=cur->next;
 		}
 		return false;
 	}
@@ -246,14 +292,14 @@ public:
 	template<typename secondType>
 	bool contain(secondType element,type &item) const
 	{
-		Node *cur = head;
-		while (cur != NULL) {
-			if (cur->item == element)
+		Node *cur=head;
+		while (cur!=NULL) {
+			if (cur->item==element)
 			    {
 			    	item=cur->item;
 			    	return true;
 				}
-			cur = cur->next;
+			cur=cur->next;
 		}
 		return false;
 	}

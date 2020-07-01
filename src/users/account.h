@@ -24,12 +24,6 @@ public:
     string getPassword() const;
     void setPassword(string);
     Account *getAccount();
-//    bool validationEmail() const;
-//    bool validationName() const;
-//    bool validationUsername() const;
-//    bool validationPassword() const;
-//    bool confirmPassword(string) const;
-
 };
 
 #endif //UNTITLED1_ACCOUNT_H

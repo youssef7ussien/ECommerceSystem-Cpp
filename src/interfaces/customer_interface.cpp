@@ -22,21 +22,13 @@ void categoriesNames(int x,int y,int column,int index,const List<Category> &cate
     color();
 }
 
-//void categoriesNames(int x,int y,int column,int index,const Category categories[],int length)
-//{
-//    for(int i=0 ; i<length ; i++)
-//    {
-//        setCursor(x+(20+3)*(i%column)+2,3*(i/column)+y);
-//        index==i ? color(BLACK,RED) : color();
-//        cout<<" "<<categories[i].getName(); clearLine(17-categories[i].getName().size());
-//    }
-//    color();
-//}
-
-void productBigBox(int x,int y,const Product product)
+void productBigBox(int x,int y,const Product& product)
 {
     drawRectangle(x,y,25,7); // Border Box
-    setCursor(x+2,y+1); cout<<product.getName();
+    if(product.getName().size()>21)
+        { setCursor(x+2,y+1); cout<<product.getName().substr(0,20)<<"..."; }
+    else
+        { setCursor(x+2,y+1); cout<<product.getName(); }
     drawLine(x+2,y+2,x+24,y+2);
     setCursor(x+8,y+3); cout<<product.getPrice()<<" $";
     drawRectangle(x+14,y+5,9,1); // BUY Box
@@ -55,7 +47,7 @@ void productButtons(int x,int y,int numberProduct,int index=-1)
     color();
 }
 
-int showCategories(string customerName,const List<Category> &categories)
+int showCategories(const string& customerName,const List<Category> &categories)
 {
     system("cls");
     int numCategories=categories.getLength();
@@ -63,11 +55,11 @@ int showCategories(string customerName,const List<Category> &categories)
     setCursor(8,5); color(YELLOW); cout<<"All Categories"; color();
     drawLine(6,6,123,6,DARK_GRAY); // Line
     categoriesBoxes(8,8,5,numCategories); // Categories Boxes
-    char key='0',index=0;
-    while(key!=KEY_ENTER)
+    int index=0;
+    while(true)
     {
         categoriesNames(8,9,5,index,categories,numCategories);
-        while(1)
+        while(true)
         {
             char key=_getch();
             if(key==KEY_RIGHT)
@@ -84,10 +76,9 @@ int showCategories(string customerName,const List<Category> &categories)
                     return -1;
         }
     }
-    return -1;
 }
 
-int showProducts(string customerName,const List<Product> &products,string categoryName)
+int showProducts(const string& customerName,const List<Product> &products,const string& titlePage)
 {
     int numberProducts=products.getLength(), remainingProducts=0, page=1, length=0;
     if(numberProducts>12)
@@ -96,15 +87,26 @@ int showProducts(string customerName,const List<Product> &products,string catego
         { remainingProducts=0; length=numberProducts; }
 
     bool nextPage=false, prevPage=false;
-    while(1)
+    while(true)
     {
         system("cls");
         char key='0'; int index=0,y=4;
         statusBar(customerName,"BACK");
-        if(categoryName!="")
+        if(!titlePage.empty())
         {
-            setCursor(8,y++); cout<<"Category : ";
-            color(YELLOW); cout<<categoryName; color();
+            setCursor(8,y++);
+            if(titlePage[0]=='*') // '*' -> search
+            {
+                cout<<"Search results for ' ";
+                color(GREEN);  cout<<titlePage.substr(1); color();
+                cout<<" ' , "; color(RED);  cout<<products.getLength();
+                color(); cout<<" products found.";
+            }
+            else
+            {
+                cout<<"Category : "; color(YELLOW);
+                cout<<titlePage; color();
+            }
             drawLine(6,y,123,y,DARK_GRAY); // Line
             y++;
         }
@@ -133,23 +135,18 @@ int showProducts(string customerName,const List<Product> &products,string catego
         length=length*2+2;
         while(key!=KEY_ENTER)
         {
-            index<length-2 ? productButtons(9,y,(length-2)/2,index%(length-2)) : productButtons(9,y,(length-2)/2);
+            index<length-2 ? productButtons(9,y,(length-2)/2,index)
+                             : productButtons(9,y,(length-2)/2);
             if(index==length-2)
                 remainingProducts+12<numberProducts ? color(BLACK,RED) : color(BLACK,DARK_GRAY);
             setCursor(59,33); cout<<" < "; color();
             if(index==length-1)
                 remainingProducts ? color(BLACK,RED) : color(BLACK,DARK_GRAY);
             setCursor(67,33); cout<<" > "; color();
-            while(1)
+            while(true)
             {
                 key=_getch();
-                if(key=='n' && remainingProducts)
-                    { nextPage=true; key=KEY_ENTER; break; }
-                else if(key==12 && remainingProducts)
-                    { nextPage=true; key=KEY_ENTER; break; }
-                else if(key=='b' && remainingProducts+12<numberProducts)
-                    { prevPage=true; key=KEY_ENTER;  break; }
-                else if(key==KEY_RIGHT)
+                if(key==KEY_RIGHT)
                     { index=(index+1)%length; break; }
                 else if(key==KEY_LEFT)
                     { index=(index+length-1)%length; break; }
@@ -170,10 +167,14 @@ int showProducts(string customerName,const List<Product> &products,string catego
                     else if(index==length-2 && remainingProducts+12<numberProducts)
                         { prevPage=true; break; }
                     else if(index<length-2)
-                        return (index+24*(page-1)); // 24 -> number of buttons options
+                        return(index+24*(page-1)); // 24 -> number of buttons options
                 }
                 else if(key==KEY_ESC)
                     return -1;
+                else if(key=='n' && remainingProducts)
+                    { nextPage=true; key=KEY_ENTER; break; }
+                else if(key=='b' && remainingProducts+12<numberProducts)
+                    { prevPage=true; key=KEY_ENTER;  break; }
             }
         }
     }
@@ -210,7 +211,7 @@ int firstPageOfCustomer(const Customer &customer,const Products &products)
     setCursor(8,32); color(DARK_GRAY); cout<<"* Press ";
     color(BROWN); cout<<"F1"; color(DARK_GRAY); cout<<" for keyboard shortcuts"; color();
 
-    while(key!=KEY_ENTER)
+    while(true)
     {
         if(!customer.cartLength() && index==1 && key==KEY_RIGHT)
             index=2;
@@ -236,18 +237,10 @@ int firstPageOfCustomer(const Customer &customer,const Products &products)
         if(index==numberButtons-1)
             color(BLACK,RED);
         setCursor(55,30); cout<<"  Show all Products  "; color();
-        while(1)
+        while(true)
         {
             key=_getch();
-            if(key==KEY_F1)
-            {
-                return -1;
-            }
-            else if(key=='c')
-                return -4;
-            else if(key=='p')
-                return -5;
-            else if(key==KEY_RIGHT)
+            if(key==KEY_RIGHT)
                 { index=(index+1)%numberButtons; break; }
             else if(key==KEY_LEFT)
                 { index=(index+numberButtons-1)%numberButtons; break; }
@@ -295,108 +288,97 @@ int firstPageOfCustomer(const Customer &customer,const Products &products)
             }
             else if(key==KEY_ESC)
                 return -1;
+            else if(key=='s')
+                return -2;
+            else if(key=='t' && customer.cartLength())
+                return -3;
+            else if(key=='c')
+                return -4;
+            else if(key=='p')
+                return -5;
+            else if(key==KEY_F1)
+                return -6;
         }
     }
     return index;
 }
 
-int searchPage(string customerName,const List<Product> &products,int &id)
+void searchField(int x,int y,int width,string &text)
+{
+    setCursor(x+width+3,y+1); cout<<"               ";
+    initialBox(x,y,width,text.size(),1);
+    while(true)
+    {
+        text=inputText();
+        if(text.empty() || !validationRegex("^[a-zA-z0-9 \\-,]{1,30}$",text))
+        {
+            setCursor(x+2,y+1); clearLine(text.size());
+            setCursor(x+width+3,y+1); cout<<"               "; wait(150);
+            setCursor(x+width+3,y+1);
+            color(DARK_RED); cout<<"Incorrect input";
+            setCursor(x+2,y+1);
+            color();
+        }
+        else
+        {
+            setCursor(x+width+3,y+1); cout<<"               ";
+            drawRectangle(x,y,width,1);
+            return;
+        }
+    }
+}
+
+string searchPage(const string& customerName,const List<Product> &products,List<Product> &productsFounded)
 {
     system("cls");
     statusBar(customerName,"BACK");
     drawRectangle(6,5,14,1); // search box
-    setCursor(8,6); cout<<"   Search   ";
-
     drawRectangle(22,5,42,1); // input box
-    drawRectangle(67,5,23,1);
-    setCursor(67+11,5); cout<<char(194);
-    setCursor(67+11,5+1); cout<<char(179);
-    setCursor(67+11,5+2); cout<<char(193);
 
     setCursor(8,9); color(YELLOW); cout<<"Results."; color();
     drawLine(7,10,122,10,DARK_GRAY);
 
-    char key='0';
-    int index=-1,numberButtons=1;
-    string text="";
-    bool found=false;
-    Product product;
-    while(key!=KEY_ENTER)
+    int index=-1;
+    string text;
+    while(true)
     {
-        if(index==-1)
-        {
-            initialBox(22,5,42,text.size());
-            text=inputText();
-            drawRectangle(22,5,42,1);
-            if(text!="" && products.contain(text,product))
-            {
-                if(!found)
-                    { setCursor(45,18); clearLine(34); }
-                id=product.getId();
-                productBigBox(15,11,product);
-                found=true;
-                numberButtons=3;
-                index=1;
-            }
-            else
-            {
-                if(found)
-                    clearMultiLines(15,11,9,27);
-                found=false;
-                numberButtons=1;
-                index=0;
-                setCursor(45,18); cout<<"There is no product with this name"; color();
-            }
-        }
-
         if(index==0) color(BLACK,RED);
         setCursor(8,6); cout<<"   Search   "; color();
 
-        if(found)
-            productButtons(15,11,1,index-1);
-
-        while(1)
+        if(index==-1)
         {
-            key=_getch();
-            if(key==KEY_RIGHT)
-                { index=(index+1)%numberButtons; break; }
-            else if(key==KEY_LEFT)
-                { index=(index+numberButtons-1)%numberButtons; break; }
-            else if(key==KEY_DOWN)
-            {
+            searchField(22,5,42,text);
+            productsFounded=products.multiSearch(text);
+            if(productsFounded.getLength())
+                return text;
+            else
+            { setCursor(45,18); cout<<"There is no product with this name"; }
+            index=0;
+            continue;
+        }
 
-                break;
-            }
-            else if(key==KEY_UP)
-            {
-
-                break;
-            }
+        while(true)
+        {
+            char key=_getch();
+            if(key==KEY_RIGHT || key==KEY_LEFT|| key==KEY_DOWN || key==KEY_UP)
+                { index=(index+1)%2; break; }
             else if(key==KEY_ENTER)
-            {
-                if(index==0)
-                    { index=-1; key='0';  break; }
-                else
-                {
-                    return index-1;
-                }
-            }
+                { index=-1; break; }
             else if(key==KEY_ESC)
-                return -1;
+                return "";
         }
     }
-    return -1;
 }
 
-string editField(int x,int y,string patternRegex,int width)
+string editField(int x,int y,const string& patternRegex,int width)
 {
-    string text="";
+    string text;
     setCursor(x+width+3,y+1); cout<<"               ";
     initialBox(x,y,width,text.size(),1);
-    while(1)
+    while(true)
     {
         text=inputText();
-        if(text=="" || !validationRegex(patternRegex,text))
+        if(text.empty() || !validationRegex(patternRegex,text))
         {
             setCursor(x+2,y+1); clearLine(text.size());
             setCursor(x+width+3,y+1); cout<<"               "; wait(150);
@@ -434,8 +416,8 @@ int enterPurchaseData(PurchaseData &PD)
     drawRectangle(61,30,12,1); // Cancel box
     drawRectangle(76,30,30,1); // Finish box
 
-    char key='0';  int index=2;
-    while(key!=KEY_ENTER)
+   int index=2;
+    while(true)
     {
         if(index==1) color(BLACK,RED);
         setCursor(63,31); cout<<"  Cancel  "; color();
@@ -453,9 +435,9 @@ int enterPurchaseData(PurchaseData &PD)
             continue;
         }
 
-        while(1)
+        while(true)
         {
-            key=_getch();
+            char key=_getch();
             if(key==KEY_LEFT || key==KEY_RIGHT)
                 { index=(index+1)%2; break; }
             else if(key==KEY_ENTER)
@@ -464,10 +446,9 @@ int enterPurchaseData(PurchaseData &PD)
                 return -1;
         }
     }
-    return -1;
 }
 
-int showCart(string customerName,Queue<Product> products,PurchaseData &PD)
+int showCart(const string& customerName,Queue<Product> products,PurchaseData &PD)
 {
     system("cls");
     statusBar(customerName,"BACK");
@@ -497,13 +478,13 @@ int showCart(string customerName,Queue<Product> products,PurchaseData &PD)
     drawRectangle(64,10,27,1); // Complete box
     drawRectangle(94,10,20,1); // clear cart box
     int index=0;
-    while(1)
+    while(true)
     {
         if(index==0) color(BLACK,RED);
         setCursor(66,11); cout<<"  Complete the purchase  "; color();
         if(index==1) color(BLACK,RED);
         setCursor(96,11); cout<<"  Empty the cart  "; color();
-        while(1)
+        while(true)
         {
             char key=_getch();
             if(key==KEY_LEFT || key==KEY_RIGHT)
@@ -516,33 +497,6 @@ int showCart(string customerName,Queue<Product> products,PurchaseData &PD)
             }
             else if(key==KEY_ESC)
                 return -1;
-        }
-    }
-    return -1;
-}
-
-void noProductDialog()
-{
-    color(RED); drawRectangle(38,7,53,6); color();
-    for(int i=0 ; i<=5 ; i++)
-        { setCursor(39,i+8); clearLine(52); }
-    setCursor(46,9);
-    cout<<"No sellers have added any products yet";
-    drawRectangle(81,11,8,1);
-    int index=0;
-    while(1)
-    {
-        if(index==0) color(BLACK,RED);
-            setCursor(83,12); cout<<"  OK  "; color();
-        while(1)
-        {
-            char key=_getch();
-            if(key==KEY_LEFT || key==KEY_DOWN || key==KEY_RIGHT || key==KEY_UP)
-                { index=(index+1)%2; break; }
-            else if(key==KEY_ENTER && index==0)
-                return ;
-            else if(key==KEY_ESC)
-                    return ;
         }
     }
 }
@@ -559,10 +513,66 @@ string nameDialog()
     setCursor(42,11);
     string name=inputText();
 
-    return name!="" ? name : "No Name";
+    return !name.empty() ? name : "No Name";
 }
 
-void buyDialog(const Customer &customer,string productName)
+void keyboardControlCustomerDialog(int x,int y,Colors background=RED)
+{
+    int index=0;
+    while(true)
+    {
+        if(index==0) color(BLACK,background);
+        setCursor(x,y); cout<<"  OK  "; color();
+        while(true)
+        {
+            char key=_getch();
+            if(key==KEY_LEFT || key==KEY_DOWN || key==KEY_RIGHT || key==KEY_UP)
+                { index=(index+1)%2; break; }
+            else if(key==KEY_ESC || (key==KEY_ENTER && index==0))
+                return ;
+        }
+    }
+}
+
+void shortcutsCustomerDialog(const string& customerName)
+{
+    system("cls");
+    statusBar(customerName,"BACK");
+    setCursor(61,6); cout<<"Shortcuts";
+    drawLine(58,7,72,7,DARK_GRAY);
+    color(DARK_GRAY); drawRectangle(38,8,53,17); color();
+    setCursor(42,10); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"F1 "; color(); cout<<" : To show shortcuts Dialog.";
+    setCursor(42,12); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"t  "; color(); cout<<" : To go to the shopping cart page.";
+    setCursor(42,14); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"s  "; color(); cout<<" : To go to the search page.";
+    setCursor(42,16); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"c  "; color(); cout<<" : To show all Categories.";
+    setCursor(42,18); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"p  "; color(); cout<<" : To show all Products.";
+    setCursor(42,20); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"b  "; color(); cout<<" : To previous page.";
+    setCursor(42,22); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"n  "; color(); cout<<" : To next page.";
+    setCursor(42,24); color(DARK_GRAY); cout<<"- "; color(CYAN);
+    cout<<"ECS"; color(); cout<<" : To back or logout.";
+    drawRectangle(83,27,8,1);
+    keyboardControlCustomerDialog(85,28);
+}
+
+void noProductDialog()
+{
+    color(RED); drawRectangle(38,7,53,6); color();
+    for(int i=0 ; i<=5 ; i++)
+        { setCursor(39,i+8); clearLine(52); }
+    setCursor(46,9);
+    cout<<"No sellers have added any products yet";
+    drawRectangle(81,11,8,1);
+    keyboardControlCustomerDialog(83,12);
+}
+
+void buyDialog(const Customer &customer,const string& productName)
 {
     system("cls");
     statusBar(customer.getName());
@@ -573,77 +583,29 @@ void buyDialog(const Customer &customer,string productName)
     color(YELLOW); cout<<customer.cartLength();
     color(DARK_GRAY); cout<<" products";
     color(); drawRectangle(80,16,8,1);
-
-    int index=0;
-    while(1)
-    {
-        if(index==0) color(BLACK,YELLOW);
-            setCursor(82,17); cout<<"  OK  "; color();
-        while(1)
-        {
-            char key=_getch();
-            if(key==KEY_LEFT || key==KEY_DOWN)
-                { index=(index+1)%2; break; }
-            else if(key==KEY_RIGHT || key==KEY_UP)
-                { index=(index+3)%2; break; }
-            else if(key==KEY_ENTER && index==0)
-                return;
-            else if(key==KEY_ESC)
-                    return;
-        }
-    }
+    keyboardControlCustomerDialog(82,17,YELLOW);
 }
 
-void cartFullDialog(string customerName)
+void cartFullDialog(const string& customerName)
 {
     system("cls");
-    statusBar(customerName);
+    statusBar(customerName,"BACK");
     color(RED); drawRectangle(34,12,60,8); color();
     setCursor(37,14);
     cout<<"Your shopping cart is full, please complete the purchase";
     setCursor(37,16);
     cout<<"process or empty the shopping cart to buy again.";
     color(); drawRectangle(84,18,8,1);
-    int index=0;
-    while(1)
-    {
-        if(index==0) color(BLACK,RED);
-            setCursor(86,19); cout<<"  OK  "; color();
-        while(1)
-        {
-            char key=_getch();
-            if(key==KEY_LEFT || key==KEY_DOWN || key==KEY_RIGHT || key==KEY_UP)
-                { index=(index+1)%2; break; }
-            else if(key==KEY_ENTER && index==0)
-                return ;
-            else if(key==KEY_ESC)
-                return ;
-        }
-    }
+    keyboardControlCustomerDialog(86,19);
 }
 
-void outOfStockDialog(string customerName)
+void outOfStockDialog(const string& customerName)
 {
     system("cls");
     statusBar(customerName);
     color(RED); drawRectangle(34,12,60,6); color();
     setCursor(37,14); cout<<"This product is out of stock.";
     color(); drawRectangle(84,16,8,1);
-    int index=0;
-    while(1)
-    {
-        if(index==0) color(BLACK,RED);
-            setCursor(86,17); cout<<"  OK  "; color();
-        while(1)
-        {
-            char key=_getch();
-            if(key==KEY_LEFT || key==KEY_DOWN || key==KEY_RIGHT || key==KEY_UP)
-                { index=(index+1)%2; break; }
-            else if(key==KEY_ENTER && index==0)
-                return ;
-            else if(key==KEY_ESC)
-                return ;
-        }
-    }
+    keyboardControlCustomerDialog(86,17);
 }
 

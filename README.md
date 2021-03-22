@@ -1,5 +1,5 @@
 # E-Commerce Management System `C++`
-This project is a project of the end of the second academic year of data structures (INF 270).
+This project is a project of the end of the second academic year of `Data Structures (INF 270)`.
 
 ## Features
 
@@ -58,9 +58,9 @@ And there are 22 products added.
 
   |                    Home                     |                     Login                      |
   | :-----------------------------------------: | :--------------------------------------------: |
-  |       ![Home](.\screenshots\home.png)       |       ![Login](.\screenshots\login.png)        |
+  |       ![Home](/screenshots/home.png)       |       ![Login](/screenshots/login.png)        |
   |                    **Register seller**          |                     **Customer  login**            |
-  |       ![Home](.\screenshots\register.png)   |     ![Login](.\screenshots\customer_login.png) |
+  |       ![Home](/screenshots/register.png)   |     ![Login](/screenshots/customer_login.png) |
 
 
 
@@ -68,9 +68,9 @@ And there are 22 products added.
 
   |               Admin Interface               |                 Admin Profile                  |
   | :-----------------------------------------: | :--------------------------------------------: |
-  | ![Admin](.\screenshots\admin_interface.png) |   ![Admin Profile](.\screenshots\admin_profile.png)    |
+  | ![Admin](/screenshots/admin_interface.png) |   ![Admin Profile](/screenshots/admin_profile.png)    |
   |           **Show Seller by Admin**          |                     **Show Product by Admin**          |
-  | ![Show Seller by Admin](.\screenshots\show_seller_by_admin.png) |   ![Show Product by Admin](.\screenshots\show_product_admin.png)    |
+  | ![Show Seller by Admin](/screenshots/show_seller_by_admin.png) |   ![Show Product by Admin](/screenshots/show_product_admin.png)    |
 
 
 
@@ -78,9 +78,9 @@ And there are 22 products added.
   
   |            Seller (01) Interface            |                  Show Product                  |
   | :-----------------------------------------: | :--------------------------------------------: |
-  |   ![Seller](.\screenshots\seller_01.png)    | ![Show Product](.\screenshots\show_product_seller.png) |
+  |   ![Seller](/screenshots/seller_01.png)    | ![Show Product](/screenshots/show_product_seller.png) |
   |                Edit Product                 |               Add Product               |
-  | ![Edit Product](.\screenshots\edit_product.png) | ![Add Product](.\screenshots\add_product.png) |
+  | ![Edit Product](/screenshots/edit_product.png) | ![Add Product](/screenshots/add_product.png) |
 
 
 
@@ -88,12 +88,12 @@ And there are 22 products added.
 
   |                    Customer Interface                     |                     Show All Categories                      |
   | :-------------------------------------------------------: | :----------------------------------------------------------: |
-  |     ![Customer](.\screenshots\customer_interface.png)     | ![Show all Categories](.\screenshots\show_all_categories.png) |
+  |     ![Customer](/screenshots/customer_interface.png)     | ![Show all Categories](/screenshots/show_all_categories.png) |
   |                     Show All Products                     |                            Search                            |
-  | ![Show all Products](.\screenshots\Show_all_products.png) |             ![Search](.\screenshots\search.png)              |
+  | ![Show all Products](/screenshots/Show_all_products.png) |             ![Search](/screenshots/search.png)              |
   |                      Search Results                       |                         Show Product                         |
-  |    ![Search Results](.\screenshots\search_results.png)    |   ![Show Product](.\screenshots\show_product_customer.png)   |
+  |    ![Search Results](/screenshots/search_results.png)    |   ![Show Product](/screenshots/show_product_customer.png)   |
   |                       Shopping Cart                       |                    Complete The Purchase                     |
-  |     ![Shopping Cart](.\screenshots\shopping_cart.png)     | ![Complete The Purchase](.\screenshots\complete_purchase.png) |
+  |     ![Shopping Cart](/screenshots/shopping_cart.png)     | ![Complete The Purchase](/screenshots/complete_purchase.png) |
   |                          Invoice                          |                                                              |
-  |      ![Invoice](.\screenshots\Customer_invoice.png)       |                                                              |
+  |      ![Invoice](/screenshots/Customer_invoice.png)       |                                                              |

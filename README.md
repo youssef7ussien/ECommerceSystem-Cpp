@@ -90,10 +90,10 @@ And there are 22 products added.
   | :-------------------------------------------------------: | :----------------------------------------------------------: |
   |     ![Customer](/screenshots/customer_interface.png)     | ![Show all Categories](/screenshots/show_all_categories.png) |
   |                     Show All Products                     |                            Search                            |
-  | ![Show all Products](/screenshots/Show_all_products.png) |             ![Search](/screenshots/search.png)              |
+  | ![Show all Products](/screenshots/show_all_products.png) |             ![Search](/screenshots/search.png)              |
   |                      Search Results                       |                         Show Product                         |
   |    ![Search Results](/screenshots/search_results.png)    |   ![Show Product](/screenshots/show_product_customer.png)   |
   |                       Shopping Cart                       |                    Complete The Purchase                     |
   |     ![Shopping Cart](/screenshots/shopping_cart.png)     | ![Complete The Purchase](/screenshots/complete_purchase.png) |
   |                          Invoice                          |                                                              |
-  |      ![Invoice](/screenshots/Customer_invoice.png)       |                                                              |
+  |      ![Invoice](/screenshots/customer_invoice.png)       |                                                              |

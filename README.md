@@ -56,44 +56,50 @@ And there are 22 products added.
 
 * Main Pages :
 
-  |                    Home                     |                     Login                      |
-  | :-----------------------------------------: | :--------------------------------------------: |
-  |       ![Home](/screenshots/home.png)       |       ![Login](/screenshots/login.png)        |
-  |                    **Register seller**          |                     **Customer  login**            |
-  |       ![Home](/screenshots/register.png)   |     ![Login](/screenshots/customer_login.png) |
+  |               Home                |                  Login                   |
+  | :-------------------------------: | :--------------------------------------: |
+  |   ![Home](screenshots/home.png)   |     ![Login](screenshots/login.png)      |
+  |        **Register seller**        |           **Customer  login**            |
+  | ![Home](screenshots/register.png) | ![Login](screenshots/customer_login.png) |
 
 
 
 * Admin Interface :
 
-  |               Admin Interface               |                 Admin Profile                  |
-  | :-----------------------------------------: | :--------------------------------------------: |
-  | ![Admin](/screenshots/admin_interface.png) |   ![Admin Profile](/screenshots/admin_profile.png)    |
-  |           **Show Seller by Admin**          |                     **Show Product by Admin**          |
-  | ![Show Seller by Admin](/screenshots/show_seller_by_admin.png) |   ![Show Product by Admin](/screenshots/show_product_admin.png)    |
+  |                       Admin Interface                        |                        Admin Profile                         |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  |          ![Admin](screenshots/admin_interface.png)           |       ![Admin Profile](screenshots/admin_profile.png)        |
+  |                   **Show Seller by Admin**                   |                  **Show Product by Admin**                   |
+  | ![Show Seller by Admin](screenshots/show_seller_by_admin.png) | ![Show Product by Admin](screenshots/show_product_admin.png) |
 
 
 
 * Seller Interface :
   
-  |            Seller (01) Interface            |                  Show Product                  |
-  | :-----------------------------------------: | :--------------------------------------------: |
-  |   ![Seller](/screenshots/seller_01.png)    | ![Show Product](/screenshots/show_product_seller.png) |
-  |                Edit Product                 |               Add Product               |
-  | ![Edit Product](/screenshots/edit_product.png) | ![Add Product](/screenshots/add_product.png) |
+  |             Seller (01) Interface             |                     Show Product                     |
+  | :-------------------------------------------: | :--------------------------------------------------: |
+  |     ![Seller](screenshots/seller_01.png)      | ![Show Product](screenshots/show_product_seller.png) |
+  |               **Edit Product**                |                   **Add Product**                    |
+  | ![Edit Product](screenshots/edit_product.png) |     ![Add Product](screenshots/add_product.png)      |
 
 
 
 * Customer Interface :
 
-  |                    Customer Interface                     |                     Show All Categories                      |
-  | :-------------------------------------------------------: | :----------------------------------------------------------: |
-  |     ![Customer](/screenshots/customer_interface.png)     | ![Show all Categories](/screenshots/show_all_categories.png) |
-  |                     Show All Products                     |                            Search                            |
-  | ![Show all Products](/screenshots/show_all_products.png) |             ![Search](/screenshots/search.png)              |
-  |                      Search Results                       |                         Show Product                         |
-  |    ![Search Results](/screenshots/search_results.png)    |   ![Show Product](/screenshots/show_product_customer.png)   |
-  |                       Shopping Cart                       |                    Complete The Purchase                     |
-  |     ![Shopping Cart](/screenshots/shopping_cart.png)     | ![Complete The Purchase](/screenshots/complete_purchase.png) |
-  |                          Invoice                          |                                                              |
-  |      ![Invoice](/screenshots/customer_invoice.png)       |                                                              |
+  |                   Customer Interface                    |                     Show All Categories                     |
+  | :-----------------------------------------------------: | :---------------------------------------------------------: |
+  |     ![Customer](screenshots/customer_interface.png)     | ![Show all Categories](screenshots/show_all_categories.png) |
+  |                  **Show All Products**                  |                         **Search**                          |
+  | ![Show all Products](screenshots/Show_all_products.png) |              ![Search](screenshots/search.png)              |
+  |                   **Search Results**                    |                      **Show Product**                       |
+  |    ![Search Results](screenshots/search_results.png)    |   ![Show Product](screenshots/show_product_customer.png)    |
+  |                    **Shopping Cart**                    |                  **Complete The Purchase**                  |
+  |     ![Shopping Cart](screenshots/shopping_cart.png)     | ![Complete The Purchase](screenshots/complete_purchase.png) |
+  |                       **Invoice**                       |                                                             |
+  |      ![Invoice](screenshots/Customer_invoice.png)       |                                                             |
+
+## Contributors
+
+  |                   youssef7ussien                   |                     M-Soliman2000                 |
+  | :------------------------------------------------: | :-----------------------------------------------: |
+  |  ![Photo](https://avatars.githubusercontent.com/u/53413129?v=4) <br> [Profile](https://github.com/youssef7ussien)   |      ![Photo](https://avatars.githubusercontent.com/u/65240197?v=4) <br> [Profile](https://github.com/M-Soliman2000)  |
